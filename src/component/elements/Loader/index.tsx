@@ -1,6 +1,6 @@
 import { Loading } from '@nextui-org/react';
 import { classicNameResolver } from 'typescript';
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 
 function Loader() {

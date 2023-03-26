@@ -1,0 +1,10 @@
+.root {
+   @apply mr-[24px];
+  .searchWrapper {
+    @apply rounded-[20px] border-[0.5px] bg-grey w-[248px] h-[42px] flex px-[10px] items-center border-primary;
+    & input {
+      @apply border-none bg-transparent w-full h-full ml-[8px] placeholder:text-darkLight;
+    
+    }
+  }
+}

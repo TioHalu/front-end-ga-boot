@@ -1,0 +1,7 @@
+
+  .buttonWrapper {
+    @apply flex bg-primary w-[160px] h-[48px] rounded-[20px];
+    & button {
+      @apply flex justify-center items-center w-full h-full text-white;
+    }
+  }
