@@ -12,6 +12,7 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
+RUN npm install --save-dev @types/redux-logger
 RUN npm run build
 
 FROM node:18-alpine AS runner
