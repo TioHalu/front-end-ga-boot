@@ -52,7 +52,7 @@
     .drawerItemSubItemIcon {
       @apply mr-[10px];
       & img {
-        @apply w-[20px] h-[20px];
+        @apply w-[20px] h-[20px] fill-black;
       }
      
     }

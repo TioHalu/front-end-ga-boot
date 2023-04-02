@@ -1,9 +1,13 @@
 
 import Base from '../../layouts/base'
 export default function Dashboard() {
+   const click = async () => {
+    console.log('test')
+  }
   return (
     <Base>
-      <h1>Dashboard</h1>
+      
+      <button onClick={click}>test</button>
     </Base>
   )
 }
