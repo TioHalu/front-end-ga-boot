@@ -1,0 +1,16 @@
+.root {
+  @apply my-[10px]
+}
+.inputWrapper {
+  @apply border-[1px] border-abu-100 rounded-[8px] py-[14px] px-[14px] outline-0 w-[350px];
+    &.sandi {
+      @apply flex justify-between ;
+    }
+  & input {
+    @apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0;
+    
+  }
+}
+.inputLabel {
+  @apply font-secondary font-bold;
+}

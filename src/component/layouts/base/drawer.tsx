@@ -5,23 +5,23 @@ import clsx from "clsx";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Image from 'next/image'
 import Link from 'next/link'
-
+import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
+import { setList } from "./slice"
+import { useDispatch } from "react-redux";
 
 function Drawer() {
-  const [active, setActive] = useState<any>([]);
+  const active = useAppSelector((state:any) => state.base.list);
+  const dispatch = useAppDispatch();
   let [path, setPath] = useState<string>("");
 
   const _handleClick = (item: any) => {
     let id = item.target.id;
-    if (active.includes(id)) {
-      active.splice(active.indexOf(id), 1)
-      setActive([...active])
-    } else setActive([...active, id])
+    return dispatch(setList(id))
   }
   useEffect(() => {
     let path = window.location.pathname;
     setPath(path);
-  },[])
+  }, [])
   return (
     <div className={styles.drawerWrapper}>
       {
@@ -30,7 +30,7 @@ function Drawer() {
             <div key={index} >
               <div className={styles.drawerItemMain} id={item.title} onClick={_handleClick}>
                 {item.title}
-                <KeyboardArrowDownIcon className={clsx(styles.drawerItemMainIcon, active.includes(item.title) && styles.active
+                  <KeyboardArrowDownIcon id={item.title} className={clsx(styles.drawerItemMainIcon, active.includes(item.title) && styles.active
                 )} />
               </div>
                 {
@@ -47,15 +47,14 @@ function Drawer() {
                           {subItem.name}
                         </div>
                         </Link>
-
                       </div>
                     )
                   })
-                }
+              }
               </div>
           )
         })
-    }
+      }
     </div>
   )
 }
