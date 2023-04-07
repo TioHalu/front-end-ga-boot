@@ -34,14 +34,14 @@ function Drawer() {
                 )} />
               </div>
                 {
-                item.sub.map((subItem, subIndex) => {
+                item.sub.map((subItem, subIndex):any => {
                     return (
                       <div key={subIndex} className={clsx(
                         styles.drawerItemSubItem, active.includes(item.title) && styles.active, path === subItem.link && styles.actived
-                      )}>
+                      )} >
                         <Link href={subItem.link} className="flex">
                         <div className={styles.drawerItemSubItemIcon} >
-                          <Image src={subItem.icon} alt={subItem.name} />
+                            {subItem.icon}
                         </div>
                         <div className={styles.drawerItemSubItemName}>
                           {subItem.name}

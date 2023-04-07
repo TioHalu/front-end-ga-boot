@@ -1,45 +1,34 @@
 
 import Base from '../../layouts/base';
-
 import styles from "./index.module.scss";
 import Table from "@/component/elements/Table";
-import Button from "@/component/elements/Button";
 export default function Deploy() {
    const dataTable = [
   {
-    title: "Service Name",
+    title: "Images Name",
     value:["aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh",]
   },
   {
-    title: "Images",
+    title: "Tag",
     value:["aduh","aduh"]
   },
    {
-    title: "Namespaces",
-    value:["test","tfsfd"]
-  },
-  {
-    title: "Deploy At",
-    value:["aduh","aduhd","adudh","aduh","aduh","aduh"]
-  },
-   {
-    title: "Restart",
+    title: "Repository",
     value:["test","tfsfd"]
   },
   {
     title: "Status",
-    value:["aduh","aduh"]
-    },
+    value:["aduh","aduhd","adudh","aduh","aduh","aduh"]
+  },
    {
-    title: "Aksi",
-    value:["aduh","aduh"]
-  }
+    title: "Build At",
+    value:["test","tfsfd"]
+  },
 ]
   return (
     <Base>
      <div className={styles.wrapper}>
-        <h1>Deployment</h1>
-        <Button>+ Deploy</Button>
+        <h1>Images Registry</h1>
       </div>
       <div className={styles.tableWrapper}>
         

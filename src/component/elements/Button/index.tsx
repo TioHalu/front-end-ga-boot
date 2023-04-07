@@ -1,8 +1,11 @@
 import styles from "./styles.module.scss";
-
-function Component({ onClick, children }:any) {
+import clsx from "clsx";
+function Component({ onClick, children, variant, className }:any) {
   return (
-    <div className={styles.buttonWrapper}>
+    <div className={clsx(styles.buttonWrapper, {
+      [styles.small]: variant === "small",
+      [styles.rounded]: variant === "rounded",
+    },className)}>
       <button onClick={onClick}>{children}</button>
     </div>
   );
