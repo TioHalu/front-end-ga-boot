@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import type { AppProps } from 'next/app';
 import React from 'react';
 import Head from 'next/head';

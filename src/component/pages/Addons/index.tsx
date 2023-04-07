@@ -7,7 +7,7 @@ import Button from "@/component/elements/Button";
 export default function Deploy() {
    const dataTable = [
   {
-    title: "Service Name",
+    title: "Addons Name",
     value:["aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh",]
   },
   {
@@ -15,19 +15,19 @@ export default function Deploy() {
     value:["aduh","aduh"]
   },
    {
-    title: "Namespaces",
+    title: "Environment Variable",
     value:["test","tfsfd"]
   },
   {
-    title: "Deploy At",
+    title: "Namespaces",
     value:["aduh","aduhd","adudh","aduh","aduh","aduh"]
   },
    {
-    title: "Restart",
+    title: "Developer Name",
     value:["test","tfsfd"]
   },
   {
-    title: "Status",
+    title: "Created At",
     value:["aduh","aduh"]
     },
    {
@@ -38,8 +38,7 @@ export default function Deploy() {
   return (
     <Base>
      <div className={styles.wrapper}>
-        <h1>Deployment</h1>
-        <Button>+ Deploy</Button>
+        <h1>Addons</h1>
       </div>
       <div className={styles.tableWrapper}>
         
