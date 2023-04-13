@@ -4,7 +4,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import clsx from "clsx";
 
-function Input({ placeholder, onChange, label, variant }: any) {
+function Input({ placeholder, onChange, label, variant, icon }: any) {
   const [eye, setEye] = React.useState(false);
   const _handleMouseDown = () => {
     console.log(eye);
@@ -33,7 +33,14 @@ function Input({ placeholder, onChange, label, variant }: any) {
               )}
             </button>
           </div>
-          )
+        )
+      case 'form':
+        return (
+          <div className={styles.formWrapper}>
+            {icon}
+            <input placeholder={placeholder} onChange={onChange} />
+          </div>
+        )
       default:
         break;
     }

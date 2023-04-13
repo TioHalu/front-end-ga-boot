@@ -3,27 +3,42 @@ import { listDrawer } from "../../../utils/listDrawer";
 import { useState, useEffect } from "react";
 import clsx from "clsx";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Image from 'next/image'
 import Link from 'next/link'
-import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
+import { UseAppSelector, UseAppDispatch } from "../../../redux/hooks";
 import { setList } from "./slice"
-import { useDispatch } from "react-redux";
-
+import { useRouter } from 'next/router'
+import ModalExpired from "@/component/elements/ModalExpired";
 function Drawer() {
-  const active = useAppSelector((state:any) => state.base.list);
-  const dispatch = useAppDispatch();
+  const active = UseAppSelector((state:any) => state.base.list);
+  const dispatch = UseAppDispatch();
+  const router = useRouter();
+  const user = UseAppSelector((state:any) => state.authLogin.user);
   let [path, setPath] = useState<string>("");
-
-  const _handleClick = (item: any) => {
-    let id = item.target.id;
-    return dispatch(setList(id))
-  }
+  const [open, setOpen] = useState<boolean>(false);
+  useEffect(() => {
+    if (!user) {
+      localStorage.clear();
+      setOpen(true);
+    }
+  }, [user, router])
   useEffect(() => {
     let path = window.location.pathname;
     setPath(path);
   }, [])
+  const _handleClick = (item: any) => {
+    let id = item.target.id;
+    return dispatch(setList(id))
+  }
+  const _handleModalExpired = () => {
+    return (
+      <>
+        <ModalExpired open={open} />
+      </>
+    )
+  }
   return (
     <div className={styles.drawerWrapper}>
+      {_handleModalExpired()}
       {
         listDrawer.map((item, index) => {
           return (

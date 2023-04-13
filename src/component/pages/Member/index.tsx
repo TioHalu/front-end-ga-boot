@@ -4,8 +4,13 @@ import Base from '../../layouts/base';
 import styles from "./index.module.scss";
 import Table from "@/component/elements/Table";
 import Button from "@/component/elements/Button";
+import Modal from "@/component/elements/Modal";
+import Input from "@/component/elements/Input";
+import PersonIcon from '@mui/icons-material/Person';
+import { useState } from 'react';
 export default function Deploy() {
-   const dataTable = [
+  const [open, setOpen] = useState<boolean>(false);
+  const dataTable = [
   {
     title: "Developer Name",
     value:["aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh",]
@@ -39,15 +44,21 @@ export default function Deploy() {
     value:["aduh","aduh"]
      },
    
-]
+  ]
+  const _handleChange = (e: any) => { }
+  const renderComponentModal = (
+    <div className={styles.modalWrapper}>
+      <Input variant="form" label="Nama" onChange={_handleChange} icon={<PersonIcon/>} />
+    </div>
+  )
   return (
     <Base>
      <div className={styles.wrapper}>
         <h1>Member</h1>
-        <Button>+ tambahkan User</Button>
+        <Button onClick={()=>setOpen(!open)}>+ tambahkan User</Button>
       </div>
       <div className={styles.tableWrapper}>
-        
+        <Modal open={open} component={renderComponentModal} />
         <Table data={dataTable} pageSize={10}/>
       </div>
     </Base>

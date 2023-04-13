@@ -14,3 +14,8 @@
 .inputLabel {
   @apply font-secondary font-bold;
 }
+
+
+.formWrapper {
+  @apply flex gap-[12px] rounded-[8px] bg-white items-center;
+}

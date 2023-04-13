@@ -9,3 +9,11 @@
     @apply font-secondary font-bold ;
   }
 }
+
+.button {
+  @apply flex justify-center items-center w-full h-[90px]
+}
+
+.marquee {
+  @apply absolute bg-transparent 
+}
