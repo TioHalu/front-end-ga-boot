@@ -1,7 +1,9 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import baseSlice from "../component/layouts/base/slice";
+import authSlice from "@/component/pages/Login/reducer";
+import base from "@/component/layouts/base/slice";
 const rootReducer = {
-  base: baseSlice,
+  authLogin: authSlice,
+  base: base,
 };
 
 export default combineReducers(rootReducer);
