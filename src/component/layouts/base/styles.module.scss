@@ -2,7 +2,7 @@
 .root {
   @apply flex w-full h-full;
   .sideBar {
-      @apply bg-white border-r  z-20 flex flex-col items-center h-[1000px];
+      @apply bg-white border-r  z-20 flex flex-col items-center ;
       .title {
         @apply h-[100px] w-full px-[14px] items-center mt-[30px];
           & h1 {
@@ -47,15 +47,19 @@
       @apply flex items-start px-[14px] py-[16px] hover:bg-gray-100 ml-[20px] ;
     }
     &.actived {
-      @apply flex items-start px-[14px] py-[16px] ml-[20px] bg-primary hover:bg-primary ;
+      @apply flex items-start px-[14px] py-[16px] ml-[20px] bg-primary hover:bg-primary text-white;
     }
     .drawerItemSubItemIcon {
       @apply mr-[10px];
       & img {
-        @apply w-[20px] h-[20px] fill-black;
+        @apply w-[20px] h-[20px] text-white;
       }
      
     }
 
   }
+}
+
+.content {
+  @apply bg-[#EAF4F4] w-full p-[14px];
 }
