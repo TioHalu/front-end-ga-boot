@@ -4,21 +4,25 @@ import { useState, useEffect } from "react";
 import Button from "../Button"
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import PropTypes from 'prop-types';
 
 function Component({ data, pageSize }: any) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageData, setPageData] = useState<any>([]);
-
   useEffect(() => {
-    setPageData(data.map((_: any, index: number) => {
+
+    setTimeout(() => {
+      setPageData(data?.map((_: any, index: number) => {
       return {
         title: _.title,
-        value: _.value.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+        value: _.value?.slice((currentPage-1)*pageSize, currentPage*pageSize)
       }
     }))
+    }, 3000);
+    
   }, [currentPage, data, pageSize])
 
-  let totalPage = Math.ceil(data[0].value.length / pageSize)
+  let totalPage = Math.ceil(data[0]?.value?.length / pageSize)
   const _handleChangePage = (page: number) => {
     setCurrentPage(page)
   }
@@ -64,7 +68,7 @@ function Component({ data, pageSize }: any) {
               return (
                 <td key={index}>
                   <ul>
-                    {_.value.map((_: any, index: number) => {
+                    {_.value?.map((_: any, index: number) => {
                       return (
                         <li key={index}>{_}</li>
                       )
@@ -100,3 +104,13 @@ function Component({ data, pageSize }: any) {
 }
 
 export default Component
+
+Component.propTypes = {
+  data: PropTypes.array.isRequired,
+  pageSize: PropTypes.number.isRequired
+}
+
+Component.defaultProps = {
+  data: [{title:"test", value:["test","sts"]},{title:"test", value:["test","sts"]}],
+  pageSize: 5
+}
