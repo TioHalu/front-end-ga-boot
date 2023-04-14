@@ -14,3 +14,14 @@
 .inputLabel {
   @apply font-secondary font-bold;
 }
+
+.formWrapper {
+  @apply flex gap-[12px] rounded-[8px] bg-white items-center;
+  & svg {
+    @apply text-abu-100;
+  }
+  & input {
+    @apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0 w-full;
+  }
+
+}

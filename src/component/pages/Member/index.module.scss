@@ -1,0 +1,17 @@
+.wrapper {
+  & h1 {
+    @apply text-2xl font-bold text-darkLight mb-[24px]
+  }
+}
+
+.tableWrapper {
+  @apply mt-[24px]
+}
+
+.bottom {
+  @apply flex justify-between items-center mt-[24px]
+}
+
+.batal {
+  @apply bg-red
+}
