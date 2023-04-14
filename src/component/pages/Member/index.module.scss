@@ -7,3 +7,11 @@
 .tableWrapper {
   @apply mt-[24px]
 }
+
+.bottom {
+  @apply flex justify-between items-center mt-[24px]
+}
+
+.batal {
+  @apply bg-red
+}

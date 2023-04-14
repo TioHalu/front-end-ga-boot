@@ -5,19 +5,19 @@ import { useRouter } from "next/router";
 type Props = {
   open: boolean;
   title?: string;
-  component?: any;
+  children?: any;
 };
 
 
-export default function component({ open, title, component }: Props) {
+export default function component({ open, title, children }: Props) {
   
   return (
     <Modal open={open} className={styles.root}>
       <Modal.Header>
-        <Text h3>{title} </Text>
+        <Text h3>{title}</Text>
       </Modal.Header>
       <Modal.Body>
-        {component}
+        {children}
       </Modal.Body>
     </Modal>
   );
