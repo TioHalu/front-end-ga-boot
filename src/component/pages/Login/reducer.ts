@@ -52,8 +52,9 @@ export const login = createAsyncThunk(
     try {
       const response = await axios.post(API.login, payload);
       dispatch(loginSuccess(response.data));
-    } catch (error : any) {
-      dispatch(loginFailed(error.message));
+    } catch (error: any) {
+      alert(error.response.data);
+      dispatch(loginFailed(error.response.data));
     }
   }
 );

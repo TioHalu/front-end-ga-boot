@@ -15,3 +15,12 @@
 .batal {
   @apply bg-red
 }
+
+
+ .edit {
+   @apply text-yellow cursor-pointer
+ }
+
+ .delete {
+    @apply text-red
+ }

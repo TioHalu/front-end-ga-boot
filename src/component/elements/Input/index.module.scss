@@ -7,7 +7,7 @@
       @apply flex justify-between ;
     }
   & input {
-    @apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0;
+    @apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0 w-full;
     
   }
 }
@@ -23,5 +23,18 @@
   & input {
     @apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0 w-full;
   }
+}
 
+.formSelect {
+  @apply flex gap-[12px] rounded-[8px] bg-white items-center;
+    & svg {
+      @apply text-abu-100;
+    }
+  & select {
+    @apply border-0 bg-none p-0 w-full focus-visible:ring-0;
+  }
+}
+
+.error {
+  @apply text-red text-sm font-secondary;
 }
