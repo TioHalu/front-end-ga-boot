@@ -1,5 +1,5 @@
 import API from './api';
+import REGEX from './regex';
 
 
-
-export {API};
+export {API, REGEX};

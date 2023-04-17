@@ -48,3 +48,7 @@
     @apply text-primary;
   }
 }
+
+.loader {
+  @apply  flex items-center justify-center w-full h-[20vh];
+}

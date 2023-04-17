@@ -5,20 +5,18 @@ import Button from "../Button"
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PropTypes from 'prop-types';
+import { Loading } from '@nextui-org/react';
 
-function Component({ data, pageSize }: any) {
+function Component({ data, pageSize, loading }: any) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageData, setPageData] = useState<any>([]);
   useEffect(() => {
-
-    setTimeout(() => {
       setPageData(data?.map((_: any, index: number) => {
       return {
         title: _.title,
         value: _.value?.slice((currentPage-1)*pageSize, currentPage*pageSize)
       }
     }))
-    }, 3000);
     
   }, [currentPage, data, pageSize])
 
@@ -59,27 +57,28 @@ function Component({ data, pageSize }: any) {
               return (
               <th key={index}>{_.title}</th>
             )
-           })}
+          })}
           </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {pageData?.map((_: any, index: number) => {
-              return (
-                <td key={index}>
-                  <ul>
-                    {_.value?.map((_: any, index: number) => {
-                      return (
-                        <li key={index}>{_}</li>
-                      )
-                    })}
-                  </ul>
-                </td>
-              )
-            })}
-        </tr>
-        </tbody>
-      </table>
+          </thead>
+          {!loading && <tbody>
+            <tr>
+              {pageData?.map((_: any, index: number) => {
+                return (
+                  <td key={index}>
+                    <ul>
+                      {_.value?.map((_: any, index: number) => {
+                        return (
+                          <li key={index}>{_}</li>
+                        )
+                      })}
+                    </ul>
+                  </td>
+                )
+              })}
+            </tr>
+          </tbody>}
+        </table>
+        {loading &&<div className={styles.loader}><Loading type="points-opacity" size="xl" /></div>}
       <div className={styles.footer}>
         {currentPage > 1 && <Button variant="small" onClick={()=>_handlFirstPage()}>First</Button>}
         <div className={styles.pagination}>
@@ -107,10 +106,12 @@ export default Component
 
 Component.propTypes = {
   data: PropTypes.array.isRequired,
-  pageSize: PropTypes.number.isRequired
+  pageSize: PropTypes.number.isRequired,
+  loading: PropTypes.bool
 }
 
 Component.defaultProps = {
   data: [{title:"test", value:["test","sts"]},{title:"test", value:["test","sts"]}],
-  pageSize: 5
+  pageSize: 5,
+  loading: true
 }

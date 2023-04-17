@@ -4,172 +4,182 @@ import Table from "@/component/elements/Table";
 import Button from "@/component/elements/Button";
 import Modal from "@/component/elements/Modal";
 import Input from "@/component/elements/Input";
-import PersonIcon from "@mui/icons-material/Person";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import KeyIcon from "@mui/icons-material/Key";
-import EmailIcon from "@mui/icons-material/Email";
-import BadgeIcon from "@mui/icons-material/Badge";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import { useState } from "react";
+import PersonIcon from '@mui/icons-material/Person';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import KeyIcon from '@mui/icons-material/Key';
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from 'react';
 import { Formik } from "formik";
-import { UseAppDispatch, UseAppSelector } from "@/redux/hooks";
-import { member, requestMember } from "./reducer";
-import { useRef, useEffect } from "react";
+import { UseAppDispatch, UseAppSelector } from '@/redux/hooks';
+import { member, requestMember, requestMemberById, requestDeleteMember, resetForm } from "./reducer";
+import { useRef, useEffect } from 'react';
+import * as Yup from "yup";
+import { REGEX } from '@/configs';
 export default function Deploy() {
   const [open, setOpen] = useState<boolean>(false);
-
   const user = UseAppSelector((state: any) => state.authLogin);
   const data = UseAppSelector((state: any) => state.member);
-  let devName = data?.member?.data.map((item: any) => item.name);
-  let userName = data?.member?.data.map((item: any) => item.username);
-  let email = data?.member?.data.map((item: any) => item.email);
-  let namespaces = data?.member?.data.map((item: any) => item.namespaces);
-  let role = data?.member?.data.map((item: any) => item.roleId);
-  let createdAt = data?.member?.data.map((item: any) => {
-    let date = new Date(item.createdAt);
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let time = date.toLocaleTimeString();
-    return `${day}/${month}/${year} - ${time}`;
-  });
-  let updatedAt = data?.member?.data.map((item: any) => item.updatedAt);
+  const handleEdit = (id: string) => () => {
+    dispatch(requestMemberById({ token: user?.user?.data?.token, id }))
+    if (!data?.fetching) {
+      setTimeout(() => {
+        setOpen(true)
+      }, 1000);
+    }
+  }
 
+  const handledelete = (id:string)=>() => {
+    dispatch(requestDeleteMember({ token: user?.user?.data?.token, id}))
+  }
   const dataTable = [
     {
       title: "Developer Name",
-      value: devName,
+      value: data?.member?.data?.map((item: any) => item.name)
     },
     {
       title: "username",
-      value: userName,
+      value: data?.member?.data?.map((item: any) => item.username)
     },
     {
       title: "Email",
-      value: email,
+      value: data?.member?.data?.map((item: any) => item.email)
     },
     {
       title: "Namespaces",
-      value: namespaces,
+      value: data?.member?.data?.map((item: any) => item.namespaces)
     },
     {
       title: "Role",
-      value: role,
-    },
-    {
-      title: "Created At",
-      value: createdAt,
-    },
-    {
-      title: "Update At",
-      value: updatedAt,
+      value: data?.member?.data?.map((item: any) => {
+        if (item.roleId === 1) {
+          return "Admin"
+        } else {
+          return "User"
+        }
+      })
     },
     {
       title: "Action",
-      value: ["Tambahin Button Dong"],
-    },
-  ];
+      value: data?.member?.data?.map((item: any, index:number) => {
+        return (
+          <div key={index} className={styles.action}>
+            <button onClick={handleEdit(item.userId)}>
+            <EditIcon className={styles.edit}/></button>
+            <button onClick={handledelete(item.userId)}><DeleteIcon className={styles.delete} />
+            </button>
+          </div>
+        )
+      })
+    }
+  ]
   const dispatch = UseAppDispatch();
   const ref = useRef<any>(null);
   const _handleSubmit = (values: any) => {
-    dispatch(member(values));
-  };
+    dispatch(member({...values, token:user?.user?.data?.token }))
+  }
   useEffect(() => {
-    dispatch(requestMember({ token: user?.user?.data?.token }));
-  }, [dispatch, user]);
+    dispatch(requestMember({ token: user?.user?.data?.token }))
+    if(data.success){
+      setOpen(false)
+    }
+  }, [dispatch, user, data?.success])
+  const option = [
+    {
+      label: "pilih",
+      value: ""
+    },
+    {
+      label: "Admin",
+      value: "1"
+    },
+    {
+      label: "User",
+      value: "2"
+    }
+  ]
+  const handleClose = (helpers:any) => {
+    setOpen(false)
+    helpers.resetForm()
+  }
   const renderComponentModal = (helpers: any) => {
-    const { handleChange, values, handleSubmit: _handleSubmit } = helpers;
+    const { handleChange, values, handleSubmit: _handleSubmit, errors, touched, setFieldValue} = helpers;
+    const handleSelect = (e: any) => {
+      const { value } = e.target;
+      setFieldValue("roleId", value);
+    }
     return (
       <form onSubmit={_handleSubmit}>
         <div className={styles.modalWrapper}>
-          <Input
-            variant="form"
-            label="Nama"
-            onChange={handleChange}
-            value={values.name}
-            icon={<PersonIcon />}
-            name="name"
-          />
-          <Input
-            variant="form"
-            label="Username"
-            onChange={handleChange}
-            value={values.username}
-            icon={<PersonAddAlt1Icon />}
-            name="username"
-          />
-          <Input
-            variant="form"
-            label="Password"
-            onChange={handleChange}
-            value={values.password}
-            icon={<KeyIcon />}
-            name="password"
-          />
-          <Input
-            variant="form"
-            name="email"
-            label="Email"
-            onChange={handleChange}
-            value={values.email}
-            icon={<EmailIcon />}
-          />
-          <Input
-            variant="form"
-            name="namespaces"
-            label="Namespaces"
-            onChange={handleChange}
-            value={values.namespaces}
-            icon={<BadgeIcon />}
-          />
-          <Input
-            variant="form"
-            name="roleId"
-            label="Role"
-            onChange={handleChange}
-            value={values.roleId}
-            icon={<AdminPanelSettingsIcon />}
-          />
+          <Input variant="form" label="Nama" errors={touched.name&&errors.name} onChange={handleChange} value={values.name} icon={<PersonIcon/>} name="name"/>
+          <Input variant="form" label="Username" errors={touched.username&&errors.username} onChange={handleChange} value={values.username}icon={<PersonAddAlt1Icon  />} name="username"/>
+          <Input variant="form" label="Password" errors={touched.password&&errors.password} onChange={handleChange} value={values.password} icon={<KeyIcon />} name="password"/>
+          <Input variant="form" name="email" label="Email" errors={touched.email&&errors.email} onChange={handleChange} value={values.email} icon={<EmailIcon />} />
+          <Input variant="form" name="namespaces" label="Namespaces" errors={touched.namespaces&&errors.namespaces} onChange={handleChange} value={values.namespaces} icon={<BadgeIcon />} />
+          <Input variant="select" name="roleId" label="Role" errors={touched.roleId && errors.roleId} onChange={handleSelect} options={option}  icon={<AdminPanelSettingsIcon />} selected={values.roleId} />
           <div className={styles.bottom}>
-            <Button className={styles.add} type="submit">
-              Tambahkan
-            </Button>
-            <Button className={styles.batal} onClick={() => setOpen(!open)}>
-              Batal
-            </Button>
+            <Button className={styles.add} type="submit" loading={data?.fetching} size="sm">Tambahkan</Button>
+            <Button className={styles.batal} type="button" onClick={() => {
+              setOpen(false)
+              helpers.resetForm()
+              dispatch(resetForm())
+            }}>Batal</Button>
           </div>
         </div>
       </form>
-    );
-  };
-
+    )
+  }
+  
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Nama harus diisi").min(6, "Nama minimal 6 karakter"),
+    email: Yup.string().required("Email harus diisi").matches(REGEX.email, "Email tidak valid"),
+    password: Yup.string().required("Password harus diisi").min(6, "Password minimal 6 karakter"),
+    roleId: Yup.string().required("Role harus diisi"),
+    namespaces: Yup.string().required("Namespaces harus diisi").matches(REGEX.namespace, "Namespaces tidak valid"),
+    username: Yup.string().required("Username harus diisi").min(6, "Username minimal 6 karakter"),
+  })
+  const handleInitialValue = () => {
+    return {
+      name: data?.memberId?.data?.name,
+      email: data?.memberId?.data?.email,
+      password: data?.memberId?.data?.password,
+      roleId: data?.memberId?.data?.roleId,
+      namespaces: data?.memberId?.data?.namespaces,
+      username: data?.memberId?.data?.username,
+    }
+  }
+  let test = handleInitialValue()
   const renderFormik = () => {
     return (
-      <Formik
+    <Formik
         initialValues={{
-          name: "",
-          email: "",
-          password: "",
-          roleId: "",
-          namespaces: "",
-          username: "",
-        }}
-        component={renderComponentModal}
-        onSubmit={_handleSubmit}
-        innerRef={ref}
+          name:data?.memberId?.data?.name || "",
+          email: data?.memberId?.data?.email || "", 
+          password: data?.memberId?.data?.password || "",
+          roleId: data?.memberId?.data?.roleId || "",
+          namespaces: data?.memberId?.data?.namespaces || "",
+          username: data?.memberId?.data?.username || "",
+      }}
+      component={renderComponentModal}
+      validationSchema={validationSchema}
+      onSubmit={_handleSubmit}
+      innerRef={ref}
       />
     );
   };
   return (
     <Base>
-      <div className={styles.wrapper}>
+    <div className={styles.wrapper}>
         <h1>Member</h1>
         <Button onClick={() => setOpen(!open)}>+ tambahkan User</Button>
       </div>
       <div className={styles.tableWrapper}>
         <Modal open={open}>{renderFormik()}</Modal>
-        <Table data={dataTable} pageSize={10} />
+        <Table data={dataTable} pageSize={10} loading={data?.loading} />
       </div>
     </Base>
-  );
+  )
 }
