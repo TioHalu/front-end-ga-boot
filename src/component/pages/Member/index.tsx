@@ -1,5 +1,4 @@
-
-import Base from '../../layouts/base';
+import Base from "../../layouts/base";
 import styles from "./index.module.scss";
 import Table from "@/component/elements/Table";
 import Button from "@/component/elements/Button";
@@ -112,9 +111,8 @@ export default function Deploy() {
       const { value } = e.target;
       setFieldValue("roleId", value);
     }
-
     return (
-       <form onSubmit={_handleSubmit}>
+      <form onSubmit={_handleSubmit}>
         <div className={styles.modalWrapper}>
           <Input variant="form" label="Nama" errors={touched.name&&errors.name} onChange={handleChange} value={values.name} icon={<PersonIcon/>} name="name"/>
           <Input variant="form" label="Username" errors={touched.username&&errors.username} onChange={handleChange} value={values.username}icon={<PersonAddAlt1Icon  />} name="username"/>
@@ -154,7 +152,6 @@ export default function Deploy() {
     }
   }
   let test = handleInitialValue()
-  console.log(test)
   const renderFormik = () => {
     return (
     <Formik
@@ -171,13 +168,13 @@ export default function Deploy() {
       onSubmit={_handleSubmit}
       innerRef={ref}
       />
-    )
-  }
+    );
+  };
   return (
     <Base>
     <div className={styles.wrapper}>
         <h1>Member</h1>
-        <Button onClick={()=>setOpen(!open)}>+ tambahkan User</Button>
+        <Button onClick={() => setOpen(!open)}>+ tambahkan User</Button>
       </div>
       <div className={styles.tableWrapper}>
         <Modal open={open}>{renderFormik()}</Modal>
