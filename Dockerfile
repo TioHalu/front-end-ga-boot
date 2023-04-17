@@ -2,7 +2,7 @@ FROM node:18-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN  npm install --production
 
 FROM node:18-alpine AS builder
@@ -12,8 +12,7 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
-
-RUN npm install --save-dev @types/redux-logger
+RUN npm ci --save-dev @types/redux-logger
 RUN npm run build
 
 FROM node:18-alpine AS runner
@@ -36,3 +35,5 @@ EXPOSE 3000
 ENV PORT 3000
 
 CMD ["npm", "start"]
+
+##TRIGGER
