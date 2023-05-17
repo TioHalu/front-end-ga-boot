@@ -3,17 +3,28 @@ import Base from '../../layouts/base';
 import Card from '@/component/elements/Card';
 import styles from "./index.module.scss";
 import Table from "@/component/elements/Table"
-
+import { useEffect, useState } from 'react';
+import { UseAppDispatch, UseAppSelector } from '@/redux/hooks';
+import { getNodes, fetchNodes,getDeployments,getService,getImages } from './reducer';
 export default function Dashboard() {
+  const user = UseAppSelector((state: any) => state.authLogin);
+  const datas = UseAppSelector((state: any) => state.dashboard);
+  const dispatch = UseAppDispatch()
+  useEffect(() => {
+    dispatch(getNodes({ token: user?.user?.data?.token }))
+    dispatch(getDeployments({ token: user?.user?.data?.token }))
+    dispatch(getService({ token: user?.user?.data?.token }))
+    dispatch(getImages({ token: user?.user?.data?.token }))
+  } , [])
   const data = [
     {
       title: 'Nodes',
-      value: 5,
+      value: datas?.nodes?.jumlahNode,
       desc: [
         {
           color: '#20B038',
           name: 'Ready',
-          value: 3
+          value: datas?.nodes?.statusNode?.ready
         },
         {
           color: '#BD081C',
@@ -24,7 +35,7 @@ export default function Dashboard() {
     },
     {
       title: 'Deployment',
-      value: 5,
+      value: datas?.deployments?.jumlahDeployment,
       desc: [
         {
           color: '#20B038',
@@ -40,7 +51,7 @@ export default function Dashboard() {
     },
      {
       title: 'Services',
-      value: 5,
+      value: datas?.service?.jumlahService,
       desc: [
         {
           color: '#20B038',
@@ -56,7 +67,7 @@ export default function Dashboard() {
     },
      {
       title: 'Images',
-      value: 5,
+      value: datas?.images?.jumlahImages,
       desc: [
         {
           color: '#20B038',

@@ -4,6 +4,7 @@ const api = {
   login: baseUrl + 'v1/user/login',
   register: baseUrl + 'v1/user/register',
   getMember: baseUrl + 'v1/user/',
+  overview: baseUrl + 'v1/overview/'
 }
 
 export default api;
