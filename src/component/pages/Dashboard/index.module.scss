@@ -1,7 +1,7 @@
 .wrapper {
-  @apply flex items-center justify-evenly w-full h-full;
+	@apply grid grid-cols-2 md:grid-cols-5 gap-4;
 }
 
 .tableWrapper {
-  @apply mt-[24px]
+	@apply mt-[24px];
 }
