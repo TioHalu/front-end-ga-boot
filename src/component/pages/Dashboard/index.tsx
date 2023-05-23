@@ -83,51 +83,77 @@ export default function Dashboard() {
     }
   ] 
 
-  const dataTable = [
-  {
-    title: "Timestamp",
-    value:["aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh","aduh","aduhd","adudh","aduh","aduh","aduh",]
-  },
-  {
-    title: "Developer",
-    value:["aduh","aduh"]
-  },
-   {
-    title: "Repository",
-    value:["test","tfsfd"]
-  },
-  {
-    title: "Branch",
-    value:["aduh","aduhd","adudh","aduh","aduh","aduh"]
-  },
-   {
-    title: "Images",
-    value:["test","tfsfd"]
-  },
-  {
-    title: "Deploy At",
-    value:["aduh","aduh"]
-    },
-   {
-    title: "Status",
-    value:["aduh","aduh"]
-  }
-]
-  return (
-    <Base>
-      <div className={styles.wrapper}>
-        {
-          data.map((item, index):any => {
-            return (
-              <Card key={index} title={item.title} value={item.value} desc={item.desc} />
-            )
-          })
-        }
-      </div>
-      <div className={styles.tableWrapper}>
-        
-        <Table data={dataTable} pageSize={10}/>
-      </div>
-    </Base>
-  )
+	const dataTable = [
+		{
+			title: 'Timestamp',
+			value: [
+				'aduh',
+				'aduhd',
+				'adudh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduhd',
+				'adudh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduhd',
+				'adudh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduhd',
+				'adudh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduh',
+				'aduhd',
+				'adudh',
+				'aduh',
+				'aduh',
+				'aduh',
+			],
+		},
+		{
+			title: 'Developer',
+			value: ['aduh', 'aduh'],
+		},
+		{
+			title: 'Repository',
+			value: ['test', 'tfsfd'],
+		},
+		{
+			title: 'Branch',
+			value: ['aduh', 'aduhd', 'adudh', 'aduh', 'aduh', 'aduh'],
+		},
+		{
+			title: 'Images',
+			value: ['test', 'tfsfd'],
+		},
+		{
+			title: 'Deploy At',
+			value: ['aduh', 'aduh'],
+		},
+		{
+			title: 'Status',
+			value: ['aduh', 'aduh'],
+		},
+	]
+	return (
+		<Base>
+			<div className={styles.wrapper}>
+				{data.map((item, index): any => {
+					return <Card key={index} title={item.title} value={item.value} desc={item.desc} />
+				})}
+			</div>
+			<div className={styles.tableWrapper}>
+				<Table data={dataTable} pageSize={10} />
+			</div>
+		</Base>
+	)
 }

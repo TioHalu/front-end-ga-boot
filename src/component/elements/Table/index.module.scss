@@ -1,54 +1,54 @@
 .wrapper {
-  @apply w-full h-full bg-white rounded-t-3xl overflow-x-auto overflow-x-scroll;
+	@apply w-full h-full bg-white rounded-t-3xl overflow-x-auto overflow-x-scroll;
 }
 .root {
-  @apply max-w-6xl h-full relative;
+	@apply w-full h-full relative;
 }
 
 .table {
-  @apply w-full h-full ;
-  & thead {
-    & tr {
-    @apply bg-primary;
-      & th {
-        @apply text-lg font-primary font-medium text-white p-[24px];
-      }
-    }
-  }
-  & tbody {
-    & tr {
-      & td {
-        @apply text-sm font-secondary text-black text-center
-      }
-    }
-  }
+	@apply w-full h-full;
+	& thead {
+		& tr {
+			@apply bg-primary;
+			& th {
+				@apply text-lg font-primary font-medium text-white p-[24px];
+			}
+		}
+	}
+	& tbody {
+		& tr {
+			& td {
+				@apply text-sm font-secondary text-black text-center;
+			}
+		}
+	}
 }
 .footer {
-  @apply text-center w-full p-[24px] flex items-center justify-center;
+	@apply text-center w-full p-[24px] flex items-center justify-center;
 }
 
 .pagination {
-  @apply flex items-center justify-evenly mx-[20px];
+	@apply flex items-center justify-evenly mx-[20px];
 }
 
 .active {
-  @apply bg-primary mx-[10px];
+	@apply bg-primary mx-[10px];
 }
 
 .inactive {
-  @apply bg-white mx-[10px];
-  & button {
-    @apply text-primary;
-  }
+	@apply bg-white mx-[10px];
+	& button {
+		@apply text-primary;
+	}
 }
 
 .arrow {
-  @apply bg-white w-[24px] h-[24px] ;
-  & button {
-    @apply text-primary;
-  }
+	@apply bg-white w-[24px] h-[24px];
+	& button {
+		@apply text-primary;
+	}
 }
 
 .loader {
-  @apply  flex items-center justify-center w-full h-[20vh];
+	@apply flex items-center justify-center w-full h-[20vh];
 }

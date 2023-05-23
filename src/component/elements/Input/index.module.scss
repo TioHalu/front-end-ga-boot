@@ -1,40 +1,39 @@
 .root {
-  @apply my-[10px]
+	@apply my-[10px] w-full;
 }
 .inputWrapper {
-  @apply border-[1px] border-abu-100 rounded-[8px] py-[14px] px-[14px] outline-0 w-[350px];
-    &.sandi {
-      @apply flex justify-between ;
-    }
-  & input {
-    @apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0 w-full;
-    
-  }
+	@apply border-[1px] border-abu-100 rounded-[8px] py-[14px] px-[14px] outline-0 w-[350px];
+	&.sandi {
+		@apply flex justify-between;
+	}
+	& input {
+		@apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0 w-full;
+	}
 }
 .inputLabel {
-  @apply font-secondary font-bold;
+	@apply font-secondary font-bold;
 }
 
 .formWrapper {
-  @apply flex gap-[12px] rounded-[8px] bg-white items-center;
-  & svg {
-    @apply text-abu-100;
-  }
-  & input {
-    @apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0 w-full;
-  }
+	@apply flex gap-[12px] rounded-[8px] bg-white items-center;
+	& svg {
+		@apply text-abu-100;
+	}
+	& input {
+		@apply border-0 focus:border-transparent focus:ring-offset-0 focus:ring-transparent p-0 w-full;
+	}
 }
 
 .formSelect {
-  @apply flex gap-[12px] rounded-[8px] bg-white items-center;
-    & svg {
-      @apply text-abu-100;
-    }
-  & select {
-    @apply border-0 bg-none p-0 w-full focus-visible:ring-0;
-  }
+	@apply flex gap-[12px] rounded-[8px] bg-white items-center;
+	& svg {
+		@apply text-abu-100;
+	}
+	& select {
+		@apply border-0 bg-none p-0 w-full focus-visible:ring-0;
+	}
 }
 
 .error {
-  @apply text-red text-sm font-secondary;
+	@apply text-red text-sm font-secondary;
 }
