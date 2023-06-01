@@ -48,6 +48,9 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.8.0",
     "react-redux": "^8.0.5",
+    "react-terminal-component": "^1.5.0",
+    "react-terminal-ui": "^1.0.5",
+    "react-use-websocket": "^4.3.1",
     "redux-batched-subscribe": "^0.1.6",
     "redux-devtools-extension": "^2.13.9",
     "redux-logger": "^3.0.6",
@@ -56,6 +59,9 @@
     "styled-components": "^5.3.9",
     "tailwindcss-children": "^2.1.0",
     "typescript": "5.0.2",
+    "xterm-addon-fit": "^0.7.0",
+    "xterm-addon-web-links": "^0.8.0",
+    "xterm-for-react": "^1.0.4",
     "yup": "^1.1.1"
   },
   "devDependencies": {
