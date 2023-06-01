@@ -1,12 +1,50 @@
 .root {
   @apply flex flex-col;
+  @apply overscroll-none;
+
+  &::-webkit-scrollbar {
+      width: 0.5rem;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: black;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: black;
+    }
+  
+    &::-webkit-scrollbar-thumb:hover {
+      background: black;
+    }
 }
 
 .terminal {
   @apply flex flex-col flex-1;
-  @apply bg-gray-900;
+  @apply bg-gray-500;
   @apply text-white;
   @apply text-sm;
-  @apply rounded-lg;
   @apply overflow-hidden;
+  @apply overscroll-none;
+  
+  & div {
+    
+    &::-webkit-scrollbar {
+        width: 0.5rem;
+      }
+    
+      &::-webkit-scrollbar-track {
+        background: black;
+      }
+    
+      &::-webkit-scrollbar-thumb {
+        background: red;
+        border-radius: 20px;
+      }
+    
+      &::-webkit-scrollbar-thumb:hover {
+        background: white;
+      }
+  }
+ 
 }

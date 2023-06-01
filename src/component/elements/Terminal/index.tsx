@@ -5,13 +5,15 @@ import 'xterm/css/xterm.css';
 import styles from "./styles.module.scss"
 interface TerminalProps {
   socketUrl: string;
+  type: string;
 }
 
 interface TerminalProps {
   socketUrl: string;
+  type: string;
 }
 
-const TerminalComponent: React.FC<TerminalProps> = ({ socketUrl }) => {
+const TerminalComponent: React.FC<TerminalProps> = ({ socketUrl, type }) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const [terminal, setTerminal] = useState<Terminal | null>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -44,24 +46,28 @@ const TerminalComponent: React.FC<TerminalProps> = ({ socketUrl }) => {
 
     socket.addEventListener('message', (event) => {
       if (terminal) {
-          // new line ketika ada data baru dari websocket
-        if (event.data.includes('\n')) {
-          terminal.write(event.data);
-          if(event.data.includes("root@be-single-service-fb46fdb49-wt2wr:/# ")){
-            terminal.write("\r\n")
-          }
+
+        if (type === "log") {
+          const data = event.data;
+          const split = data.split("\n");
+
+          split.forEach((item: any) => {
+            terminal.write(item + "\r\n");
+          })
         } else {
-          if (event.data.includes('\b')) {
-            terminal.write('\b \b');
-          } 
-          else if (event.data.includes('\u001b')) {
-            terminal.write('\b \b');
-          } 
-          else if (event.data.includes('\t')) {
-            terminal.write('\b \b');
-          }
-          else {
+        
+          if (event.data.includes('\n')) {
             terminal.write(event.data);
+            if (event.data.includes("root@be-single-service-fb46fdb49-wt2wr:/# ")) {
+              terminal.write("\r\n")
+            }
+          } else {
+            if (event.data.includes('\b')) {
+              terminal.write('\b \b');
+            }
+            else {
+              terminal.write(event.data);
+            }
           }
         }
         
@@ -82,10 +88,10 @@ const TerminalComponent: React.FC<TerminalProps> = ({ socketUrl }) => {
         socket.close();
       }
     };
-  }, [terminal, socketUrl]);
+  }, [terminal, socketUrl, type]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleInput = (data: string) => {
+  const handleInput = (data: any) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(data);
     }
