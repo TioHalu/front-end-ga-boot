@@ -36,13 +36,14 @@ export interface DeployProps {
 export default function Deploy() {
   const [loading, setLoading] = useState(false);
   const [deploy, setDeploy] = useState<DeployProps[] | null>();
-  const [state, setState] = useState<any>([{
-    open: false,
-    type: "",
-    nameSpace: "",
-    podName: ""
-  }
-  ])
+  const [state, setState] = useState<any>([
+    {
+      open: false,
+      type: "",
+      nameSpace: "",
+      podName: "",
+    },
+  ]);
   const { open, type, nameSpace, podName } = state;
   const user = UseAppSelector((state: any) => state.authLogin);
 
@@ -113,10 +114,30 @@ export default function Deploy() {
       value: deploy?.map((data, index) => {
         return (
           <div key={index} className={styles.action}>
-            <button onClick={() => setState({ ...state, open: !open, type: "log", nameSpace: data.namespace, podName: data.name })}>
+            <button
+              onClick={() =>
+                setState({
+                  ...state,
+                  open: !open,
+                  type: "log",
+                  nameSpace: data.namespace,
+                  podName: data.name,
+                })
+              }
+            >
               <DehazeIcon className="text-blue" />
             </button>
-            <button onClick={() => setState({ ...state, open: !open, type: "exec", nameSpace: data.namespace, podName: data.name })}>
+            <button
+              onClick={() =>
+                setState({
+                  ...state,
+                  open: !open,
+                  type: "exec",
+                  nameSpace: data.namespace,
+                  podName: data.name,
+                })
+              }
+            >
               <TerminalIcon className="text-green" />
             </button>
             <button>
@@ -134,30 +155,31 @@ export default function Deploy() {
     <Base>
       <div className={styles.wrapper}>
         <h1>Deployment</h1>
-        <Button onClick={() => setState({ ...state, open: !open })} 
-        >+ Deploy</Button>
+        <Button>+ Deploy</Button>
       </div>
       <div className={styles.tableWrapper}>
         <Table data={dataTable} pageSize={10} loading={loading} />
       </div>
-      
-      <Modal open={open} onClose={() => setState({ ...state, open: !open })}
+
+      <Modal
+        open={open}
+        onClose={() => setState({ ...state, open: !open })}
         width="100%"
         blur
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        >
-        <Modal.Body
-        className={styles.modal}
-        >
+      >
+        <Modal.Body className={styles.modal}>
           <div>
-          <Suspense fallback={<div>Loading...</div>}>
-              <Terminal socketUrl={`wss://api-gaboot.adaptivenetlab.site/v1/${type}/${nameSpace}/${podName}`} type={type} />
-          </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Terminal
+                socketUrl={`wss://api-gaboot.adaptivenetlab.site/v1/${type}/${nameSpace}/${podName}`}
+                type={type}
+              />
+            </Suspense>
           </div>
-          </Modal.Body>
+        </Modal.Body>
       </Modal>
-        
     </Base>
   );
 }
