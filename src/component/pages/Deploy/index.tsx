@@ -35,6 +35,7 @@ export interface DeployProps {
 
 export default function Deploy() {
   const [loading, setLoading] = useState(false);
+  const [openModalDeploy, setOpenModalDeploy] = useState<boolean>(false);
   const [deploy, setDeploy] = useState<DeployProps[] | null>();
   const [state, setState] = useState<any>([
     {
@@ -65,6 +66,39 @@ export default function Deploy() {
   useEffect(() => {
     getAllDeployment();
   }, [getAllDeployment]);
+
+  const formik = useFormik({
+    initialValues: {
+      devName: "",
+      namespace: "",
+      serviceName: "",
+      image: "",
+      imageTag: "",
+      env: "",
+      replicas: "",
+      pvcSize: "",
+      imagePullSecrets: "",
+    },
+
+    onSubmit: async (values) => {
+      const toastLoading = toast.loading("Loading...");
+      try {
+        await axios.post(API.deployment, values, {
+          headers: {
+            "auth-token": user?.user?.data?.token,
+          },
+        });
+        setOpenModalDeploy(false);
+        formik.resetForm();
+        getAllDeployment();
+        toast.success("Deploy success");
+      } catch (error) {
+        toast.error("Deploy failed");
+      } finally {
+        toast.remove(toastLoading);
+      }
+    },
+  });
 
   const dataTable = [
     {
@@ -155,7 +189,33 @@ export default function Deploy() {
     <Base>
       <div className={styles.wrapper}>
         <h1>Deployment</h1>
-        <Button>+ Deploy</Button>
+        <Button onClick={() => setOpenModalDeploy((prev) => !prev)}>
+          + Deploy
+        </Button>
+      </div>
+      <div className={styles.tableWrapper}>
+        <Modal
+          width="600px"
+          open={openModalDeploy}
+          onClose={() => {
+            setOpenModalDeploy(false);
+            formik.resetForm();
+          }}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <Input
+              variant="form"
+              label="Dev Name"
+              icon={<FiGitlab className="ml-1" size={22} />}
+            />
+
+            <Input
+              variant="form"
+              label="Namespace"
+              icon={<FiGitlab className="ml-1" size={22} />}
+            />
+          </form>
+        </Modal>
       </div>
       <div className={styles.tableWrapper}>
         <Table data={dataTable} pageSize={10} loading={loading} />
