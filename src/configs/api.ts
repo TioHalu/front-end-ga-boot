@@ -8,6 +8,7 @@ const api = {
   gitlab: baseUrl + "v1/gitlab/",
   user: baseUrl + "v1/user",
   deployment: baseUrl + "v1/deployment",
+  services: baseUrl + "v1/services",
 };
 
 export default api;
