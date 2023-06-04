@@ -22,7 +22,7 @@ export default function Dashboard() {
     dispatch(getService({ token: user?.user?.data?.token }));
     dispatch(getImages({ token: user?.user?.data?.token }));
     dispatch(getPods({ token: user?.user?.data?.token }));
-  }, [dispatch, user?.user?.data?.token]);
+  }, []);
   const data = [
     {
       title: "Nodes",
@@ -33,11 +33,6 @@ export default function Dashboard() {
           name: "Ready",
           value: datas?.nodes?.statusNode?.ready,
         },
-        {
-          color: "#BD081C",
-          name: "Not Ready",
-          value: "",
-        },
       ],
     },
     {
@@ -46,13 +41,16 @@ export default function Dashboard() {
       desc: [
         {
           color: "#20B038",
-          name: "Ready",
+          name: "Running",
           value: datas?.pod?.podStatus?.Running,
         },
         {
-          color: "#BD081C",
+          //yellow
+          color: "#FFC107",
           name: "Not Ready",
-          value: "",
+          value: datas?.pod?.podStatus?.NotReady
+            ? datas?.pod?.podStatus?.NotReady
+            : 0,
         },
       ],
     },
@@ -92,16 +90,16 @@ export default function Dashboard() {
       title: "Images",
       value: datas?.images?.jumlahImages,
       desc: [
-        // {
-        //   color: "#20B038",
-        //   name: "Ready",
-        //   value: 3,
-        // },
-        // {
-        //   color: "#BD081C",
-        //   name: "Not Ready",
-        //   value: 2,
-        // },
+        // 	{
+        // 		color: '#20B038',
+        // 		name: 'Ready',
+        // 		value: 3,
+        // 	},
+        // 	{
+        // 		color: '#BD081C',
+        // 		name: 'Not Ready',
+        // 		value: 2,
+        // 	},
       ],
     },
   ];
