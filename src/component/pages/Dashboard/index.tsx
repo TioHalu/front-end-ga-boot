@@ -22,7 +22,7 @@ export default function Dashboard() {
     dispatch(getService({ token: user?.user?.data?.token }));
     dispatch(getImages({ token: user?.user?.data?.token }));
     dispatch(getPods({ token: user?.user?.data?.token }));
-  }, []);
+  }, [dispatch, user?.user?.data?.token]);
   const data = [
     {
       title: "Nodes",
