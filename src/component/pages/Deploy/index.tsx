@@ -12,10 +12,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import DehazeIcon from "@mui/icons-material/Dehaze";
-<<<<<<< HEAD
-import Modal from "@/component/elements/Modal";
-=======
->>>>>>> 4a99858c687d42014babd3035703a658da7411b3
 import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import PersonIcon from "@mui/icons-material/Person";
@@ -25,13 +21,9 @@ import { AiFillProject, AiOutlineMail } from "react-icons/ai";
 import { BiNotepad } from "react-icons/bi";
 import { BsShieldFill, BsFillClipboard2Fill } from "react-icons/bs";
 import { toast } from "react-hot-toast";
-<<<<<<< HEAD
-
-=======
 import { lazy, Suspense } from "react";
 import { Modal } from "@nextui-org/react";
 const Terminal = lazy(() => import("@/component/elements/Terminal"));
->>>>>>> 4a99858c687d42014babd3035703a658da7411b3
 export interface DeployProps {
   name: string;
   namespace: string;
@@ -44,40 +36,6 @@ export interface DeployProps {
 export default function Deploy() {
   const [loading, setLoading] = useState(false);
   const [deploy, setDeploy] = useState<DeployProps[] | null>();
-<<<<<<< HEAD
-  const user = UseAppSelector((state: any) => state.authLogin);
-
-  const getAllDeployment = useCallback(async () => {
-    try {
-      const res = await axios.get(API.deployment, {
-        headers: {
-          "auth-token": user?.user?.data?.token,
-        },
-      });
-      setDeploy(res.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [user?.user?.data?.token]);
-
-  useEffect(() => {
-    getAllDeployment();
-  }, [getAllDeployment]);
-
-  const dataTable = [
-    {
-      title: "Name",
-      value: deploy?.map((item) => {
-        let name = item.name;
-        if (name.length > 15) {
-          return name.slice(0, 10);
-        }
-        return name;
-      }),
-    },
-=======
   const [state, setState] = useState<any>([
     {
       open: false,
@@ -119,7 +77,6 @@ export default function Deploy() {
         return name;
       }),
     },
->>>>>>> 4a99858c687d42014babd3035703a658da7411b3
     {
       title: "Images",
       value: deploy?.map((item) => {
@@ -157,12 +114,6 @@ export default function Deploy() {
       value: deploy?.map((data, index) => {
         return (
           <div key={index} className={styles.action}>
-<<<<<<< HEAD
-            <button>
-              <DehazeIcon className="text-blue" />
-            </button>
-            <button>
-=======
             <button
               onClick={() =>
                 setState({
@@ -187,7 +138,6 @@ export default function Deploy() {
                 })
               }
             >
->>>>>>> 4a99858c687d42014babd3035703a658da7411b3
               <TerminalIcon className="text-green" />
             </button>
             <button>
@@ -210,8 +160,6 @@ export default function Deploy() {
       <div className={styles.tableWrapper}>
         <Table data={dataTable} pageSize={10} loading={loading} />
       </div>
-<<<<<<< HEAD
-=======
 
       <Modal
         open={open}
@@ -232,7 +180,6 @@ export default function Deploy() {
           </div>
         </Modal.Body>
       </Modal>
->>>>>>> 4a99858c687d42014babd3035703a658da7411b3
     </Base>
   );
 }
