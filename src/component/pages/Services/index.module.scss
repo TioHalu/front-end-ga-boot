@@ -1,9 +1,30 @@
 .wrapper {
   & h1 {
-    @apply text-2xl font-bold text-darkLight mb-[24px]
+    @apply text-2xl font-bold text-darkLight mb-[24px];
   }
 }
 
 .tableWrapper {
-  @apply mt-[24px]
+  @apply mt-[24px];
 }
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 999;
+}
+
+// .truncate:hover::after {
+//   content: attr(title);
+//   position: absolute;
+//   overflow: visible;
+//   width: max-content;
+//   white-space: nowrap;
+//   background-color: #333;
+//   color: #fff;
+//   padding: 2px 5px;
+//   border-radius: 3px;
+//   top: 100%;
+//   left: 0;
+// }

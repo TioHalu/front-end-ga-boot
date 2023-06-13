@@ -10,6 +10,7 @@ const api = {
 	deployment: baseUrl + 'v1/deployment',
 	gitlabImages: baseUrl + 'v1/gitlab-images',
 	gitlabTagImages: baseUrl + 'v1/gitlab-tag-images',
-}
+  services: baseUrl + "v1/services",
+};
 
 export default api

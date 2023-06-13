@@ -39,10 +39,19 @@ export default function Deploy() {
 				},
 			})
 			setImages(res.data.data)
+			// console.log(images[0])
+			formik.setFieldValue('images', res.data.data[0].repositoryName)
+			setPID(res.data.data[0].projectId)
 		} catch (error: any) {
 			console.log('🚀 ~ file: index.tsx:36 ~ getImageName ~ error:', error.message)
 		}
 	}
+
+	useEffect(() => {
+		formik.setFieldValue('images', images[0]?.repositoryName)
+		setPID(images[0]?.projectId)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [images])
 
 	useEffect(() => {
 		getImageName()
@@ -169,6 +178,8 @@ export default function Deploy() {
 	]
 	console.log(selectedProjectId)
 
+	const [check, setCheck] = useState(false)
+	const [isDemoData, setIsDemoData] = useState(false)
 	return (
 		<Base>
 			<div className={styles.wrapper}>
