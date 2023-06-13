@@ -45,9 +45,17 @@ function Input({ placeholder, onChange, disabled, label, variant, icon, value, n
 				return (
 					<div className={styles.formSelect}>
 						{icon}
-						<select name={name} onChange={onChange} placeholder={placeholder}>
+						<select
+							className="disabled:cursor-not-allowed disabled:bg-gray-300"
+							disabled={disabled}
+							value={selected}
+							name={name}
+							onChange={onChange}
+							placeholder={placeholder}
+						>
+							<option value="">{placeholder}</option>
 							{options?.map((option: any, i: number) => (
-								<option key={i} selected={option.value === selected} value={option.value}>
+								<option key={i} selected={option.value === selected}>
 									{option.label}
 								</option>
 							))}
