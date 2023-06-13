@@ -8,6 +8,8 @@ const api = {
   gitlab: baseUrl + "v1/gitlab/",
   user: baseUrl + "v1/user",
   deployment: baseUrl + "v1/deployment",
+  gitlabImages: baseUrl + "v1/gitlab-images",
+  gitlabTagImages: baseUrl + "v1/gitlab-tag-images",
   services: baseUrl + "v1/services",
 };
 
