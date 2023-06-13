@@ -15,6 +15,7 @@ import { AiOutlineFileAdd, AiOutlinePlusCircle } from 'react-icons/ai'
 import { UseAppSelector } from '@/redux/hooks'
 import { useFormik } from 'formik'
 import axios from 'axios'
+import { API } from '@/configs'
 
 export default function Deploy() {
 	const { user } = UseAppSelector((state: any) => state.authLogin)
@@ -22,10 +23,8 @@ export default function Deploy() {
 	const [modalAdd, setModalAdd] = useState(false)
 	const [addons, setAddons] = useState<{ id: number; key: string; addons: string }[]>([])
 	const [env, setEnv] = useState<{ id: number; key: string; value: string }[]>([])
-	const [images, setImages] = useState<{ devName: string; repositoryName: string; projectId: number }[]>([])
-	console.log('🚀 ~ file: index.tsx:26 ~ Deploy ~ images:', images)
+	const [images, setImages] = useState<{ devName: string; repositoryName: string; projectID: number }[]>([])
 	const [selectedProjectId, setPID] = useState<number>()
-	console.log('🚀 ~ file: index.tsx:27 ~ Deploy ~ selectedProjectId:', selectedProjectId)
 	// console.log(
 	// 	addons?.map(a => {
 	// 		return { [a.key]: a.addons }
@@ -34,26 +33,16 @@ export default function Deploy() {
 
 	const getImageName = async () => {
 		try {
-			const res = await axios('https://api-gaboot.adaptivenetlab.site/v1/gitlab-images', {
+			const res = await axios(API.gitlabImages, {
 				headers: {
 					'auth-token': user?.data?.token,
 				},
 			})
 			setImages(res.data.data)
-
-			// console.log(images[0])
-			formik.setFieldValue('images', res.data.data[0].repositoryName)
-			setPID(res.data.data[0].projectId)
 		} catch (error: any) {
 			console.log('🚀 ~ file: index.tsx:36 ~ getImageName ~ error:', error.message)
 		}
 	}
-
-	useEffect(() => {
-		formik.setFieldValue('images', images[0]?.repositoryName)
-		setPID(images[0]?.projectId)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [images])
 
 	useEffect(() => {
 		getImageName()
@@ -178,9 +167,8 @@ export default function Deploy() {
 			value: ['aduh', 'aduh'],
 		},
 	]
+	console.log(selectedProjectId)
 
-	const [check, setCheck] = useState(false)
-	const [isDemoData, setIsDemoData] = useState(false)
 	return (
 		<Base>
 			<div className={styles.wrapper}>
@@ -220,11 +208,12 @@ export default function Deploy() {
 							variant="select"
 							name="images"
 							label="Images"
+							placeholder="Pilih images"
 							errors={formik.touched.images && formik.errors.images}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								formik.setFieldValue('images', e.target.value)
 								const findImage = images.find(image => image.repositoryName === e.target.value)
-								setPID(findImage?.projectId)
+								setPID(findImage?.projectID)
 							}}
 							options={images?.map(image => {
 								return {
