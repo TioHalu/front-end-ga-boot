@@ -18,10 +18,10 @@ export default function App({ Component, pageProps }: AppProps) {
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link rel="preconnect" href="https://fonts.gstatic.com" />
 				<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet" />
-				 {/* eslint-disable-next-line @next/next/no-css-tags */}
-				 <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
-      	{/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      	<script src="node_modules/xterm/lib/xterm.js"></script>
+				{/* eslint-disable-next-line @next/next/no-css-tags */}
+				<link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+				{/* eslint-disable-next-line @next/next/no-sync-scripts */}
+				<script src="node_modules/xterm/lib/xterm.js"></script>
 				<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet" />
 			</Head>
 			<Provider store={store}>
