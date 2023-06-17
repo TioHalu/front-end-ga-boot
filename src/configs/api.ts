@@ -12,6 +12,7 @@ const api = {
 	gitlabTagImages: baseUrl + 'v1/gitlab-tag-images',
 	services: baseUrl + 'v1/services',
 	supportService: baseUrl + 'v1/support-services',
+	images: baseUrl + 'v1/images',
 }
 
 export default api
