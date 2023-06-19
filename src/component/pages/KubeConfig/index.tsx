@@ -17,181 +17,83 @@ import { useFormik } from 'formik'
 import axios from 'axios'
 import { API } from '@/configs'
 
-export default function Deploy() {
-	const { user } = UseAppSelector((state: any) => state.authLogin)
+export default function KubeConfigPage() {
+  const { user } = UseAppSelector((state: any) => state.authLogin)
 
-	const [modalAdd, setModalAdd] = useState(false)
-	const [addons, setAddons] = useState<{ id: number; key: string; addons: string }[]>([])
-	const [env, setEnv] = useState<{ id: number; key: string; value: string }[]>([])
-	const [images, setImages] = useState<{ devName: string; repositoryName: string; projectID: number }[]>([])
-	const [selectedProjectId, setPID] = useState<number>()
-	// console.log(
-	// 	addons?.map(a => {
-	// 		return { [a.key]: a.addons }
-	// 	})
-	// )
+  const dataTable = [
+    {
+      title: 'Service Name',
+      value: [
+        'aduh',
+        'aduhd',
+        'adudh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduhd',
+        'adudh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduhd',
+        'adudh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduhd',
+        'adudh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduh',
+        'aduhd',
+        'adudh',
+        'aduh',
+        'aduh',
+        'aduh'
+      ]
+    },
+    {
+      title: 'Images',
+      value: ['aduh', 'aduh']
+    },
+    {
+      title: 'Namespaces',
+      value: ['test', 'tfsfd']
+    },
+    {
+      title: 'Deploy At',
+      value: ['aduh', 'aduhd', 'adudh', 'aduh', 'aduh', 'aduh']
+    },
+    {
+      title: 'Restart',
+      value: ['test', 'tfsfd']
+    },
+    {
+      title: 'Status',
+      value: ['aduh', 'aduh']
+    },
+    {
+      title: 'Aksi',
+      value: ['aduh', 'aduh']
+    }
+  ]
 
-	const getImageName = async () => {
-		try {
-			const res = await axios(API.gitlabImages, {
-				headers: {
-					'auth-token': user?.data?.token,
-				},
-			})
-			setImages(res.data.data)
-			// console.log(images[0])
-			formik.setFieldValue('images', res.data.data[0].repositoryName)
-			setPID(res.data.data[0].projectId)
-		} catch (error: any) {
-			console.log('🚀 ~ file: index.tsx:36 ~ getImageName ~ error:', error.message)
-		}
-	}
+  return (
+    <Base>
+      <div className={styles.wrapper}>
+        <h1>Deployment</h1>
+        <Button>+ Deploy</Button>
+      </div>
+      <div className={styles.tableWrapper}>
+        <Table data={dataTable} pageSize={10} />
+      </div>
 
-	useEffect(() => {
-		formik.setFieldValue('images', images[0]?.repositoryName)
-		setPID(images[0]?.projectID)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [images])
-
-	useEffect(() => {
-		getImageName()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	const formik = useFormik({
-		initialValues: {
-			devName: user?.data?.name,
-			namespaces: user?.data?.namespaces,
-			servicesName: '',
-			images: '',
-			demoData: false,
-			autoSyncImages: false,
-		},
-		onSubmit: async values => console.log(values, selectedProjectId),
-	})
-
-	const onChangeAddons = (id: number) => {
-		return (e: React.ChangeEvent<HTMLInputElement>) => {
-			const copyAddons: Array<any> = [...addons]
-			copyAddons[id][e.target.name] = e.target.value
-			setAddons(copyAddons)
-		}
-	}
-
-	const addMoreAddons = () => {
-		setAddons(prev => [...prev, { id: Date.now(), key: '', addons: '' }])
-	}
-
-	const deleteAddons = (id: number) => {
-		return () => {
-			const filtered = addons.filter(a => a.id !== id)
-			setAddons(filtered)
-		}
-	}
-
-	const onChangeEnv = (id: number) => {
-		return (e: React.ChangeEvent<HTMLInputElement>) => {
-			const copyEnv: Array<any> = [...env]
-			copyEnv[id][e.target.name] = e.target.value
-			setEnv(copyEnv)
-		}
-	}
-
-	const addMoreEnv = () => {
-		setEnv(prev => [...prev, { id: Date.now(), key: '', value: '' }])
-	}
-
-	const deleteEnv = (id: number) => {
-		return () => {
-			const filtered = env.filter(a => a.id !== id)
-			setEnv(filtered)
-		}
-	}
-
-	const closeDeployModal = () => {
-		setModalAdd(false)
-		setAddons([])
-		setEnv([])
-		formik.resetForm()
-	}
-
-	const dataTable = [
-		{
-			title: 'Service Name',
-			value: [
-				'aduh',
-				'aduhd',
-				'adudh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduhd',
-				'adudh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduhd',
-				'adudh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduhd',
-				'adudh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduh',
-				'aduhd',
-				'adudh',
-				'aduh',
-				'aduh',
-				'aduh',
-			],
-		},
-		{
-			title: 'Images',
-			value: ['aduh', 'aduh'],
-		},
-		{
-			title: 'Namespaces',
-			value: ['test', 'tfsfd'],
-		},
-		{
-			title: 'Deploy At',
-			value: ['aduh', 'aduhd', 'adudh', 'aduh', 'aduh', 'aduh'],
-		},
-		{
-			title: 'Restart',
-			value: ['test', 'tfsfd'],
-		},
-		{
-			title: 'Status',
-			value: ['aduh', 'aduh'],
-		},
-		{
-			title: 'Aksi',
-			value: ['aduh', 'aduh'],
-		},
-	]
-	console.log(selectedProjectId)
-
-	const [check, setCheck] = useState(false)
-	const [isDemoData, setIsDemoData] = useState(false)
-	return (
-		<Base>
-			<div className={styles.wrapper}>
-				<h1>Deployment</h1>
-				<Button onClick={() => setModalAdd(true)}>+ Deploy</Button>
-			</div>
-			<div className={styles.tableWrapper}>
-				<Table data={dataTable} pageSize={10} />
-			</div>
-
-			{/* Modal deploy */}
-			<Modal width="670px" open={modalAdd} onClose={closeDeployModal}>
+      {/* Modal deploy */}
+      {/* <Modal width="670px" open={modalAdd} onClose={closeDeployModal}>
 				<form onSubmit={formik.handleSubmit}>
 					<Input
 						variant="form"
@@ -419,7 +321,7 @@ export default function Deploy() {
 						</button>
 					</div>
 				</form>
-			</Modal>
-		</Base>
-	)
+			</Modal> */}
+    </Base>
+  )
 }

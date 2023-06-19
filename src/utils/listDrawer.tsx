@@ -6,6 +6,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import AcUnitIcon from '@mui/icons-material/AcUnit'
 import GitHubIcon from '@mui/icons-material/GitHub'
+import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
 export interface SubDrawer {
   title: string
@@ -53,14 +54,19 @@ export const listDrawer: SubDrawer[] = [
     title: 'Administrator',
     sub: [
       {
+        name: 'Kube Config',
+        link: '/administrator/kube-config',
+        icon: <AcUnitIcon />
+      },
+      {
         name: 'Member',
         link: '/administrator/member',
         icon: <PeopleAltIcon />
       },
       {
-        name: 'Kube Config',
-        link: '/administrator/kube-config',
-        icon: <AcUnitIcon />
+        name: 'Project',
+        link: '/administrator/project',
+        icon: <AccountTreeIcon />
       },
       {
         name: 'Gitlab Config',
