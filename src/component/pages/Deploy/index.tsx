@@ -1,352 +1,344 @@
-import Base from "../../layouts/base";
+import Base from '../../layouts/base'
 
-import styles from "./index.module.scss";
-import Table from "@/component/elements/Table";
-import Button from "@/component/elements/Button";
-import axios from "axios";
-import { API } from "@/configs";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { UseAppSelector } from "@/redux/hooks";
-import formatDate from "@/utils/formatDate";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import TerminalIcon from "@mui/icons-material/Terminal";
-import DehazeIcon from "@mui/icons-material/Dehaze";
-import { useFormik } from "formik";
-import PersonIcon from "@mui/icons-material/Person";
-import Input from "@/component/elements/Input";
-import { toast } from "react-hot-toast";
-import { lazy, Suspense } from "react";
-import { Modal } from "@nextui-org/react";
-import MyModal from "@/component/elements/Modal";
-import {
-  BsBoxSeam,
-  BsFillClipboard2Fill,
-  BsFillTagsFill,
-  BsStack,
-} from "react-icons/bs";
-import { FiKey, FiTrash } from "react-icons/fi";
-import { FaDatabase } from "react-icons/fa";
-import { AiOutlineFileAdd, AiOutlinePlusCircle } from "react-icons/ai";
-import * as Yup from "yup";
-import {
-  DeployForm,
-  DeployProps,
-  ImageRegistry,
-  ImageTag,
-  SupportServiceType,
-} from "./deploy.type";
+import styles from './index.module.scss'
+import Table from '@/component/elements/Table'
+import Button from '@/component/elements/Button'
+import axios from 'axios'
+import { API } from '@/configs'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { UseAppSelector } from '@/redux/hooks'
+import formatDate from '@/utils/formatDate'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import TerminalIcon from '@mui/icons-material/Terminal'
+import DehazeIcon from '@mui/icons-material/Dehaze'
+import { useFormik } from 'formik'
+import PersonIcon from '@mui/icons-material/Person'
+import Input from '@/component/elements/Input'
+import { toast } from 'react-hot-toast'
+import { lazy, Suspense } from 'react'
+import { Modal } from '@nextui-org/react'
+import MyModal from '@/component/elements/Modal'
+import { BsBoxSeam, BsFillClipboard2Fill, BsFillTagsFill, BsStack } from 'react-icons/bs'
+import { FiKey, FiTrash } from 'react-icons/fi'
+import { FaDatabase } from 'react-icons/fa'
+import { AiOutlineFileAdd, AiOutlinePlusCircle } from 'react-icons/ai'
+import * as Yup from 'yup'
+import { DeployForm, DeployProps, ImageRegistry, ImageTag, SupportServiceType } from './deploy.type'
+import { User } from '../GitlabConfig'
 
-const Terminal = lazy(() => import("@/component/elements/Terminal"));
+const Terminal = lazy(() => import('@/component/elements/Terminal'))
 
 export default function Deploy() {
-  const [loading, setLoading] = useState(false);
-  const [modalDeploy, setModalDeploy] = useState(false);
-  const [deploy, setDeploy] = useState<DeployProps[] | null>();
-  console.log("🚀 ~ file: index.tsx:35 ~ Deploy ~ deploy:", deploy);
+  const [loading, setLoading] = useState(false)
+  const [modalDeploy, setModalDeploy] = useState(false)
+  const [deploy, setDeploy] = useState<DeployProps[] | null>()
+  console.log('🚀 ~ file: index.tsx:35 ~ Deploy ~ deploy:', deploy)
   const [state, setState] = useState<any>([
     {
       open: false,
-      type: "",
-      nameSpace: "",
-      podName: "",
-    },
-  ]);
-  const { open, type, nameSpace, podName } = state;
-  const user: any = UseAppSelector((state: any) => state.authLogin);
+      type: '',
+      nameSpace: '',
+      podName: ''
+    }
+  ])
+  const { open, type, nameSpace, podName } = state
+  const user: any = UseAppSelector((state: any) => state.authLogin)
 
-  const [addons, setAddons] = useState<
-    { id: number; key: string; addons: string }[]
-  >([]);
-  const [env, setEnv] = useState<{ id: number; key: string; value: string }[]>(
-    []
-  );
+  const [addons, setAddons] = useState<{ id: number; key: string; addons: string }[]>([])
+  const [env, setEnv] = useState<{ id: number; key: string; value: string }[]>([])
 
   const supportToEnv = useMemo(() => {
     return addons?.reduce((acc: any, obj) => {
-      acc[obj.key] = obj.addons;
-      return acc;
-    }, {});
-  }, [addons]);
+      acc[obj.key] = obj.addons
+      return acc
+    }, {})
+  }, [addons])
 
   const envToEnv = useMemo(() => {
     return env.reduce((acc: any, obj) => {
-      acc[obj.key] = obj.value;
-      return acc;
-    }, {});
-  }, [env]);
+      acc[obj.key] = obj.value
+      return acc
+    }, {})
+  }, [env])
 
   const [images, setImages] = useState<
     { devName: string; repositoryName: string; projectID: number }[]
-  >([]);
+  >([])
 
   const getImageName = async () => {
     try {
       const res = await axios(API.gitlabImages, {
         headers: {
-          "auth-token": user?.user?.data?.token,
-        },
-      });
-      setImages(res.data.data);
+          'auth-token': user?.user?.data?.token
+        }
+      })
+      setImages(res.data.data)
     } catch (error: any) {
-      console.log(
-        "🚀 ~ file: index.tsx:36 ~ getImageName ~ error:",
-        error.message
-      );
+      console.log('🚀 ~ file: index.tsx:36 ~ getImageName ~ error:', error.message)
     }
-  };
+  }
 
-  const [imageRegistry, setImageRegistry] = useState<ImageRegistry[]>([]);
+  const [imageRegistry, setImageRegistry] = useState<ImageRegistry[]>([])
   const getPath = async (id: number) => {
-    const loading = toast.loading("Mengambil branch...");
+    const loading = toast.loading('Mengambil branch...')
     try {
-      const res = await axios(API.gitlabImages + "/project?projectID=" + id, {
+      const res = await axios(API.gitlabImages + '/project?projectID=' + id, {
         headers: {
-          "auth-token": user?.user?.data?.token,
-        },
-      });
+          'auth-token': user?.user?.data?.token
+        }
+      })
 
-      setImageRegistry(res.data.data);
+      setImageRegistry(res.data.data)
     } catch (error) {
-      console.log("🚀 ~ file: index.tsx:224 ~ getPath ~ error:", error);
-      toast.error("Kesalahan!");
+      console.log('🚀 ~ file: index.tsx:224 ~ getPath ~ error:', error)
+      toast.error('Kesalahan!')
     } finally {
-      toast.remove(loading);
+      toast.remove(loading)
     }
-  };
-  const [path, setPath] = useState<string>();
-  const [location, setLocation] = useState<string>();
+  }
+  const [path, setPath] = useState<string>()
+  const [location, setLocation] = useState<string>()
 
-  const [forTag, setForTag] = useState<{ project_id: number; id: number }>();
+  const [forTag, setForTag] = useState<{ project_id: number; id: number }>()
 
-  const [imagesPullSecret, setImagesPullSecret] =
-    useState<{ name: string; namespace: string }[]>();
+  const [imagesPullSecret, setImagesPullSecret] = useState<{ name: string; namespace: string }[]>()
   const getImagesPullSecret = async () => {
     try {
-      const res = await axios(API.gitlabTagImages + "/secret", {
+      const res = await axios(API.gitlabTagImages + '/secret', {
         headers: {
-          "auth-token": user?.user?.data?.token,
-        },
-      });
+          'auth-token': user?.user?.data?.token
+        }
+      })
 
-      setImagesPullSecret(res.data.data);
+      setImagesPullSecret(res.data.data)
     } catch (error) {
-      console.log(
-        "🚀 ~ file: index.tsx:133 ~ getImagesPullSecret ~ error:",
-        error
-      );
+      console.log('🚀 ~ file: index.tsx:133 ~ getImagesPullSecret ~ error:', error)
     }
-  };
+  }
 
-  const [namespace, setNamespace] = useState<Array<string>>();
+  const [users, setUsers] = useState<User[]>()
+  const getUsers = async () => {
+    try {
+      const res = await axios(API.user, {
+        headers: {
+          'auth-token': user?.user?.data?.token
+        }
+      })
+
+      setUsers(res.data.data)
+    } catch (error) {
+      console.log('🚀 ~ file: index.tsx:136 ~ getNamespaces ~ error:', error)
+    }
+  }
+
+  const [namespace, setNamespace] = useState<Array<string>>()
   const getNamespace = async () => {
     try {
-      const res = await axios(API.deployment + "/namespace", {
+      const res = await axios(API.deployment + '/namespace', {
         headers: {
-          "auth-token": user?.user?.data?.token,
-        },
-      });
+          'auth-token': user?.user?.data?.token
+        }
+      })
 
-      setNamespace(res.data.data);
+      setNamespace(res.data.data)
     } catch (error) {
-      console.log("🚀 ~ file: index.tsx:136 ~ getNamespaces ~ error:", error);
+      console.log('🚀 ~ file: index.tsx:136 ~ getNamespaces ~ error:', error)
     }
-  };
+  }
 
-  const [supportService, setSupportService] = useState<SupportServiceType[]>();
+  const [supportService, setSupportService] = useState<SupportServiceType[]>()
   const getSupportService = async () => {
     try {
       const res = await axios(API.supportService, {
         headers: {
-          "auth-token": user?.user?.data?.token,
-        },
-      });
+          'auth-token': user?.user?.data?.token
+        }
+      })
 
-      setSupportService(res.data.data);
+      setSupportService(res.data.data)
     } catch (error) {
-      console.log(
-        "🚀 ~ file: index.tsx:154 ~ getSupportService ~ error:",
-        error
-      );
+      console.log('🚀 ~ file: index.tsx:154 ~ getSupportService ~ error:', error)
     }
-  };
+  }
 
   useEffect(() => {
-    getImageName();
-    getImagesPullSecret();
-    getNamespace();
-    getSupportService();
+    getImageName()
+    getImagesPullSecret()
+    getNamespace()
+    getSupportService()
+    getUsers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const formik = useFormik<DeployForm>({
     initialValues: {
       devName: user?.user?.data?.name,
-      namespace: "",
-      serviceName: "",
-      images: "",
-      imagePullSecrets: "",
+      namespace: '',
+      serviceName: '',
+      images: '',
+      imagePullSecrets: '',
       demoData: false,
-      imageTag: "",
+      imageTag: '',
       autoSyncImages: false,
       replicas: 1,
-      pvcSize: 1,
+      pvcSize: 1
     },
     validationSchema: Yup.object<DeployForm>({
-      devName: Yup.string().required("Required"),
-      serviceName: Yup.string().required("Required"),
-      images: Yup.string().required("Required"),
-      imagePullSecrets: Yup.string().required("Required"),
-      namespace: Yup.string().required("Required"),
-      replicas: Yup.number().min(1, "Minimal 1"),
-      pvcSize: Yup.number().min(1, "Minimal 1"),
+      devName: Yup.string().required('Required'),
+      serviceName: Yup.string().required('Required'),
+      images: Yup.string().required('Required'),
+      imagePullSecrets: Yup.string().required('Required'),
+      namespace: Yup.string().required('Required'),
+      replicas: Yup.number().min(1, 'Minimal 1'),
+      pvcSize: Yup.number().min(1, 'Minimal 1')
     }),
     onSubmit: async (values) => {
-      delete values.images;
-      delete values.autoSyncImages;
+      delete values.images
+      delete values.autoSyncImages
       const envv = {
-        env: { ...supportToEnv, ...envToEnv },
-      };
-      console.log({ ...values, image: location, env: envv.env });
-      const loading = toast.loading("Deploy...");
+        env: { ...supportToEnv, ...envToEnv }
+      }
+
+      const loading = toast.loading('Deploy...')
       try {
         await axios.post(
           API.deployment,
           { ...values, image: location, env: envv.env },
           {
             headers: {
-              "auth-token": user?.user?.data?.token,
-            },
+              'auth-token': user?.user?.data?.token
+            }
           }
-        );
+        )
 
-        toast.success("Berhasil deploy");
-        closeDeployModal();
-        getAllDeployment();
+        toast.success('Berhasil deploy')
+        closeDeployModal()
+        getAllDeployment()
       } catch (error) {
-        console.log("🚀 ~ file: index.tsx:187 ~ Deploy ~ error:", error);
-        toast.error("Kesalahan!");
+        console.log('🚀 ~ file: index.tsx:187 ~ Deploy ~ error:', error)
+        toast.error('Kesalahan!')
       } finally {
-        toast.remove(loading);
+        toast.remove(loading)
       }
-    },
-  });
+    }
+  })
 
   const onChangeAddons = (id: number) => {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const copyAddons: Array<any> = [...addons];
-      copyAddons[id][e.target.name] = e.target.value;
-      setAddons(copyAddons);
-    };
-  };
+      const copyAddons: Array<any> = [...addons]
+      copyAddons[id][e.target.name] = e.target.value
+      setAddons(copyAddons)
+    }
+  }
 
   const addMoreAddons = () => {
-    setAddons((prev) => [...prev, { id: Date.now(), key: "", addons: "" }]);
-  };
+    setAddons((prev) => [...prev, { id: Date.now(), key: '', addons: '' }])
+  }
 
   const deleteAddons = (id: number) => {
     return () => {
-      const filtered = addons.filter((a) => a.id !== id);
-      setAddons(filtered);
-    };
-  };
+      const filtered = addons.filter((a) => a.id !== id)
+      setAddons(filtered)
+    }
+  }
 
   const onChangeEnv = (id: number) => {
     return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const copyEnv: Array<any> = [...env];
-      copyEnv[id][e.target.name] = e.target.value;
-      setEnv(copyEnv);
-    };
-  };
+      const copyEnv: Array<any> = [...env]
+      copyEnv[id][e.target.name] = e.target.value
+      setEnv(copyEnv)
+    }
+  }
 
   const addMoreEnv = () => {
-    setEnv((prev) => [...prev, { id: Date.now(), key: "", value: "" }]);
-  };
+    setEnv((prev) => [...prev, { id: Date.now(), key: '', value: '' }])
+  }
 
   const deleteEnv = (id: number) => {
     return () => {
-      const filtered = env.filter((a) => a.id !== id);
-      setEnv(filtered);
-    };
-  };
+      const filtered = env.filter((a) => a.id !== id)
+      setEnv(filtered)
+    }
+  }
 
   const closeDeployModal = () => {
-    setModalDeploy(false);
-    setAddons([]);
-    setEnv([]);
-    setImageRegistry([]);
-    setPath("");
-    formik.resetForm();
-  };
+    setModalDeploy(false)
+    setAddons([])
+    setEnv([])
+    setImageRegistry([])
+    setPath('')
+    formik.resetForm()
+  }
 
   const getAllDeployment = useCallback(async () => {
     try {
       const res = await axios.get(API.deployment, {
         headers: {
-          "auth-token": user?.user?.data?.token,
-        },
-      });
-      setDeploy(res.data.data);
+          'auth-token': user?.user?.data?.token
+        }
+      })
+      setDeploy(res.data.data)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [user?.user?.data?.token]);
+  }, [user?.user?.data?.token])
 
   useEffect(() => {
-    getAllDeployment();
-  }, [getAllDeployment]);
+    getAllDeployment()
+  }, [getAllDeployment])
 
   const dataTable = [
     {
-      title: "Service Name",
+      title: 'Service Name',
       value: deploy?.map((item) => {
-        let name = item.podName;
+        let name = item.podName
         if (name.length > 15) {
-          return name.slice(0, 10);
+          return name.slice(0, 10)
         }
-        return name;
-      }),
+        return name
+      })
     },
     {
-      title: "Developer Name",
-      value: deploy?.map((item) => item.developerName),
+      title: 'Developer Name',
+      value: deploy?.map((item) => item.developerName)
     },
     {
-      title: "Images",
+      title: 'Images',
       value: deploy?.map((item) => {
-        let image = item.image;
+        let image = item.image
         if (image.length > 15) {
-          return image.slice(0, 10);
+          return image.slice(0, 10)
         }
-        return image;
-      }),
+        return image
+      })
     },
     {
-      title: "Namespaces",
-      value: deploy?.map((item) => item.namespace),
+      title: 'Namespaces',
+      value: deploy?.map((item) => item.namespace)
     },
     {
-      title: "Deploy At",
+      title: 'Deploy At',
       value: deploy?.map((item) => {
-        let date = formatDate(item.creationTimestamp);
+        let date = formatDate(item.creationTimestamp)
         if (date.length > 10) {
-          return date.slice(0, 10);
+          return date.slice(0, 10)
         }
-        return date;
-      }),
+        return date
+      })
     },
     {
-      title: "Restart",
-      value: deploy?.map((item) => item.restarts),
+      title: 'Restart',
+      value: deploy?.map((item) => item.restarts)
     },
     {
-      title: "Status",
-      value: deploy?.map((item) => item.status),
+      title: 'Status',
+      value: deploy?.map((item) => item.status)
     },
     {
-      title: "Action",
+      title: 'Action',
       value: deploy?.map((data, index) => {
         return (
           <div key={index} className={styles.action}>
@@ -355,89 +347,88 @@ export default function Deploy() {
                 setState({
                   ...state,
                   open: !open,
-                  type: "log",
+                  type: 'log',
                   nameSpace: data.namespace,
-                  podName: data.podName,
+                  podName: data.podName
                 })
               }
             >
-              <DehazeIcon className="text-blue" />
+              <DehazeIcon className='text-blue' />
             </button>
             <button
               onClick={() =>
                 setState({
                   ...state,
                   open: !open,
-                  type: "exec",
+                  type: 'exec',
                   nameSpace: data.namespace,
-                  podName: data.podName,
+                  podName: data.podName
                 })
               }
             >
-              <TerminalIcon className="text-green" />
+              <TerminalIcon className='text-green' />
             </button>
             <button>
-              <EditIcon className="text-yellow" />
+              <EditIcon className='text-yellow' />
             </button>
             <button
               onClick={() => {
-                setSelectedDeploy(data);
-                setModalDelete(true);
+                setSelectedDeploy(data)
+                setModalDelete(true)
               }}
             >
-              <DeleteIcon className="text-red" />
+              <DeleteIcon className='text-red' />
             </button>
           </div>
-        );
-      }),
-    },
-  ];
+        )
+      })
+    }
+  ]
 
-  const [selectedDeploy, setSelectedDeploy] = useState<DeployProps>();
-  const [modalDelete, setModalDelete] = useState(false);
+  const [selectedDeploy, setSelectedDeploy] = useState<DeployProps>()
+  const [modalDelete, setModalDelete] = useState(false)
 
   const deleteDeploy = async () => {
-    const loading = toast.loading("Menghapus...");
+    const loading = toast.loading('Menghapus...')
     try {
       await axios.delete(
         API.deployment +
           `?namespace=${selectedDeploy?.namespace}&serviceName=${selectedDeploy?.serviceNameForDelete}&devName=${selectedDeploy?.developerName}`,
         {
           headers: {
-            "auth-token": user?.user?.data?.token,
-          },
+            'auth-token': user?.user?.data?.token
+          }
         }
-      );
-      toast.success("Berhasil menghapus deployment!");
-      getAllDeployment();
+      )
+      toast.success('Berhasil menghapus deployment!')
+      getAllDeployment()
     } catch (error) {
-      console.log("🚀 ~ file: index.tsx:343 ~ deleteDeploy ~ error:", error);
-      toast.error("Gagal menghapus deployment");
+      console.log('🚀 ~ file: index.tsx:343 ~ deleteDeploy ~ error:', error)
+      toast.error('Gagal menghapus deployment')
     } finally {
-      toast.remove(loading);
-      setModalDelete(false);
-      setSelectedDeploy(undefined);
+      toast.remove(loading)
+      setModalDelete(false)
+      setSelectedDeploy(undefined)
     }
-  };
+  }
 
-  const [tags, setTags] = useState<ImageTag[]>();
+  const [tags, setTags] = useState<ImageTag[]>()
   useEffect(() => {
     if (location) {
-      (async () => {
+      ;(async () => {
         const res = await axios(
-          API.gitlabTagImages +
-            `?projectID=${forTag?.project_id}&registryID=${forTag?.id}`,
+          API.gitlabTagImages + `?projectID=${forTag?.project_id}&registryID=${forTag?.id}`,
           {
             headers: {
-              "auth-token": user?.user?.data?.token,
-            },
+              'auth-token': user?.user?.data?.token
+            }
           }
-        );
-        setTags(res.data.data);
-      })();
+        )
+        setTags(res.data.data)
+      })()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [location])
 
   return (
     <Base>
@@ -450,81 +441,98 @@ export default function Deploy() {
       </div>
 
       {/* Modal deploy */}
-      <MyModal width="670px" open={modalDeploy} onClose={closeDeployModal}>
+      <MyModal width='670px' open={modalDeploy} onClose={closeDeployModal}>
         <form onSubmit={formik.handleSubmit}>
-          <Input
-            variant="form"
-            label="Developer Name"
-            errors={formik.touched.devName && formik.errors.devName}
-            onChange={formik.handleChange}
-            disabled={user?.user?.data?.roleId !== 1}
-            value={formik.values.devName}
-            icon={<PersonIcon />}
-            name="devName"
-          />
+          {user?.user?.data?.roleId === 1 ? (
+            <Input
+              placeholder='Pilih Developer'
+              variant='select'
+              label='Developer Name'
+              errors={formik.touched.devName && formik.errors.devName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                formik.setFieldValue('devName', e.target.value)
+              }
+              options={users?.map((user) => {
+                return {
+                  label: user.username,
+                  value: user.username
+                }
+              })}
+              value={formik.values.devName}
+              icon={<PersonIcon />}
+              name='devName'
+            />
+          ) : (
+            <Input
+              variant='form'
+              label='Developer Name'
+              errors={formik.touched.devName && formik.errors.devName}
+              onChange={formik.handleChange}
+              disabled={user?.user?.data?.roleId !== 1}
+              value={formik.values.devName}
+              icon={<PersonIcon />}
+              name='devName'
+            />
+          )}
 
           <Input
-            variant="form"
-            label="Services Name"
+            variant='form'
+            label='Services Name'
             errors={formik.touched.serviceName && formik.errors.serviceName}
             onChange={formik.handleChange}
             value={formik.values.serviceName}
-            icon={<BsBoxSeam className="ml-1" size={22} />}
-            name="serviceName"
+            icon={<BsBoxSeam className='ml-1' size={22} />}
+            name='serviceName'
           />
 
-          <div className="flex items-center space-x-4">
-            <div className="relative w-full">
+          <div className='flex items-center space-x-4'>
+            <div className='relative w-full'>
               <Input
-                variant="select"
-                name="images"
-                label="Images"
-                placeholder="Pilih images"
+                variant='select'
+                name='images'
+                label='Images'
+                placeholder='Pilih images'
                 errors={formik.touched.images && formik.errors.images}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  formik.setFieldValue("images", e.target.value);
-                  const findImage = images.find(
-                    (image) => image.repositoryName === e.target.value
-                  );
+                  formik.setFieldValue('images', e.target.value)
+                  const findImage = images.find((image) => image.repositoryName === e.target.value)
 
                   if (e.target.value) {
-                    getPath(findImage?.projectID as number);
+                    getPath(findImage?.projectID as number)
                   }
                 }}
                 options={images?.map((image) => {
                   return {
                     label: image.repositoryName,
-                    value: image.repositoryName,
-                  };
+                    value: image.repositoryName
+                  }
                 })}
-                icon={<FaDatabase className="ml-1" size={22} />}
+                icon={<FaDatabase className='ml-1' size={22} />}
                 selected={formik.values.images}
               />
               {imageRegistry.length > 0 && (
-                <div className="absolute -right-28 top-0 w-60 p-4 rounded-md bg-blue-200 z-30">
+                <div className='absolute -right-28 top-0 w-60 p-4 rounded-md bg-blue-200 z-30'>
                   <Input
-                    variant="select"
-                    name="path"
-                    label="Branch"
-                    placeholder="Pilih Branch"
+                    variant='select'
+                    name='path'
+                    label='Branch'
+                    placeholder='Pilih Branch'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setPath(e.target.value);
-                      const findImage = imageRegistry.find(
-                        (image) => image.path === e.target.value
-                      );
-                      setLocation(findImage?.location);
+                      setPath(e.target.value)
+                      const findImage = imageRegistry.find((image) => image.path === e.target.value)
+                      setLocation(findImage?.location)
                       setForTag({
                         project_id: findImage?.project_id as number,
-                        id: findImage?.id as number,
-                      });
+                        id: findImage?.id as number
+                      })
 
-                      setImageRegistry([]);
+                      setImageRegistry([])
                     }}
                     options={imageRegistry?.map((image) => {
                       return {
                         label: image.path,
-                        value: image.path,
-                      };
+                        value: image.path
+                      }
                     })}
                     // icon={<FaDatabase className="ml-1" size={22} />}
                     selected={path}
@@ -533,231 +541,211 @@ export default function Deploy() {
               )}
             </div>
             <Input
-              variant="select"
-              name="imageTag"
-              label="Tags"
-              placeholder="Pilih Tags"
+              variant='select'
+              name='imageTag'
+              label='Tags'
+              placeholder='Pilih Tags'
               disabled={!location && !tags}
               errors={formik.touched.imageTag && formik.errors.imageTag}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                formik.setFieldValue("imageTag", e.target.value)
+                formik.setFieldValue('imageTag', e.target.value)
               }
               options={tags?.map((tag) => {
                 return {
                   label: tag.name,
-                  value: tag.name,
-                };
+                  value: tag.name
+                }
               })}
-              icon={<BsFillTagsFill className="ml-1" size={22} />}
+              icon={<BsFillTagsFill className='ml-1' size={22} />}
               selected={formik.values.imageTag}
             />
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className='flex items-center space-x-4'>
             <Input
-              variant="select"
-              placeholder="Pilih image pull secret"
-              name="imagePullSecrets"
-              label="Images Pull Secret"
-              errors={
-                formik.touched.imagePullSecrets &&
-                formik.errors.imagePullSecrets
-              }
+              variant='select'
+              placeholder='Pilih image pull secret'
+              name='imagePullSecrets'
+              label='Images Pull Secret'
+              errors={formik.touched.imagePullSecrets && formik.errors.imagePullSecrets}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                formik.setFieldValue("imagePullSecrets", e.target.value)
+                formik.setFieldValue('imagePullSecrets', e.target.value)
               }
               options={imagesPullSecret?.map((image) => {
                 return {
                   label: image.name,
-                  value: image.name,
-                };
+                  value: image.name
+                }
               })}
-              icon={<FiKey className="ml-1" size={22} />}
+              icon={<FiKey className='ml-1' size={22} />}
               selected={formik.values.imagePullSecrets}
             />
             <Input
-              variant="select"
-              name="namespace"
-              placeholder="Pilih namespace"
-              label="Namespace"
+              variant='select'
+              name='namespace'
+              placeholder='Pilih namespace'
+              label='Namespace'
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                formik.setFieldValue("namespace", e.target.value)
+                formik.setFieldValue('namespace', e.target.value)
               }
               options={namespace?.map((ns: string) => {
                 return {
                   label: ns,
-                  value: ns,
-                };
+                  value: ns
+                }
               })}
               errors={formik.touched.namespace && formik.errors.namespace}
               selected={formik.values.namespace}
-              icon={<BsFillClipboard2Fill className="ml-1" size={22} />}
+              icon={<BsFillClipboard2Fill className='ml-1' size={22} />}
             />
           </div>
 
           <Input
-            variant="form"
-            label="Custom Odoo Addons"
+            variant='form'
+            label='Custom Odoo Addons'
             disabled
             // errors={formik.touched.repositoryName && formik.errors.repositoryName}
             // onChange={formik.handleChange}
             // value={formik.values.repositoryName}
-            icon={<AiOutlineFileAdd className="ml-1" size={22} />}
-            name="repositoryName"
+            icon={<AiOutlineFileAdd className='ml-1' size={22} />}
+            name='repositoryName'
           />
 
-          <div className="flex items-center space-x-4">
+          <div className='flex items-center space-x-4'>
             <Input
-              variant="form"
-              type="number"
-              label="Storage"
+              variant='form'
+              type='number'
+              label='Storage'
               errors={formik.touched.pvcSize && formik.errors.pvcSize}
               onChange={formik.handleChange}
               value={formik.values.pvcSize}
-              icon={<FaDatabase className="ml-1" size={22} />}
-              name="pvcSize"
+              icon={<FaDatabase className='ml-1' size={22} />}
+              name='pvcSize'
             />
             <Input
-              variant="form"
-              type="number"
-              label="Replicas"
+              variant='form'
+              type='number'
+              label='Replicas'
               errors={formik.touched.replicas && formik.errors.replicas}
               onChange={formik.handleChange}
               value={formik.values.replicas}
-              icon={<BsStack className="ml-1" size={22} />}
-              name="replicas"
+              icon={<BsStack className='ml-1' size={22} />}
+              name='replicas'
             />
 
             <Input
-              variant="toggle"
-              label="Auto Sync Images"
-              onChange={() =>
-                formik.setFieldValue(
-                  "autoSyncImages",
-                  !formik.values.autoSyncImages
-                )
-              }
-              name="autoSyncImages"
+              variant='toggle'
+              label='Auto Sync Images'
+              onChange={() => formik.setFieldValue('autoSyncImages', !formik.values.autoSyncImages)}
+              name='autoSyncImages'
               value={formik.values.autoSyncImages}
             />
 
             <Input
-              variant="toggle"
-              label="Demo Data"
+              variant='toggle'
+              label='Demo Data'
               // errors={formik.touched.repositoryName && formik.errors.repositoryName}
-              onChange={() =>
-                formik.setFieldValue("demoData", !formik.values.demoData)
-              }
-              name="demoData"
+              onChange={() => formik.setFieldValue('demoData', !formik.values.demoData)}
+              name='demoData'
               value={formik.values.demoData}
             />
           </div>
 
           <div>
-            <label className="font-secondary font-bold block">
-              Support Services
-            </label>
+            <label className='font-secondary font-bold block'>Support Services</label>
             {addons.length > 0 &&
               addons.map((a, id) => (
                 <>
-                  <div className="flex items-center space-x-4" key={a.id}>
+                  <div className='flex items-center space-x-4' key={a.id}>
                     <Input
-                      variant="form"
+                      variant='form'
                       // label="Developer Name"
                       // errors={formik.touched.repositoryName && formik.errors.repositoryName}
                       onChange={onChangeAddons(id)}
                       value={a.key}
-                      name="key"
+                      name='key'
                     />
                     <Input
-                      variant="select"
-                      name="addons"
-                      placeholder="Select Addons"
+                      variant='select'
+                      name='addons'
+                      placeholder='Select Addons'
                       // label="Images Pull Secret"
                       // errors={formik.touched.email && formik.errors.email}
                       onChange={onChangeAddons(id)}
                       options={supportService?.map((s) => {
                         return {
                           label: s.serviceNetworkName,
-                          value: s.serviceNetworkName,
-                        };
+                          value: s.serviceNetworkName
+                        }
                       })}
                       selected={a.addons}
                     />
-                    <button type="button" onClick={deleteAddons(a.id)}>
-                      <FiTrash size={22} className="text-blue-500" />
+                    <button type='button' onClick={deleteAddons(a.id)}>
+                      <FiTrash size={22} className='text-blue-500' />
                     </button>
                   </div>
                 </>
               ))}
             <button
-              type="button"
+              type='button'
               onClick={addMoreAddons}
-              className="flex text-blue-500 items-center space-x-2 border-2 rounded-lg px-4 py-1 border-blue-500 font-semibold"
+              className='flex text-blue-500 items-center space-x-2 border-2 rounded-lg px-4 py-1 border-blue-500 font-semibold'
             >
-              <AiOutlinePlusCircle size={22} />{" "}
-              <span>
-                {addons.length > 0
-                  ? "Add More Support Service"
-                  : "Support Services"}
-              </span>
+              <AiOutlinePlusCircle size={22} />{' '}
+              <span>{addons.length > 0 ? 'Add More Support Service' : 'Support Services'}</span>
             </button>
           </div>
-          <div className="mt-4">
-            <label className="font-secondary font-bold block">
-              Environment Variable
-            </label>
+          <div className='mt-4'>
+            <label className='font-secondary font-bold block'>Environment Variable</label>
             {env.length > 0 &&
               env.map((a, id) => (
                 <>
-                  <div className="flex items-center space-x-4" key={a.id}>
+                  <div className='flex items-center space-x-4' key={a.id}>
                     <Input
-                      variant="form"
+                      variant='form'
                       // errors={formik.touched.repositoryName && formik.errors.repositoryName}
                       onChange={onChangeEnv(id)}
                       value={a.key}
-                      name="key"
+                      name='key'
                     />
                     <Input
-                      variant="form"
+                      variant='form'
                       // errors={formik.touched.repositoryName && formik.errors.repositoryName}
                       onChange={onChangeEnv(id)}
                       value={a.value}
-                      name="value"
+                      name='value'
                     />
-                    <button onClick={deleteEnv(a.id)} type="button">
-                      <FiTrash size={22} className="text-blue-500" />
+                    <button onClick={deleteEnv(a.id)} type='button'>
+                      <FiTrash size={22} className='text-blue-500' />
                     </button>
                   </div>
                 </>
               ))}
             <button
-              type="button"
+              type='button'
               onClick={addMoreEnv}
-              className="flex text-blue-500 items-center space-x-2 border-2 rounded-lg px-4 py-1 border-blue-500 font-semibold"
+              className='flex text-blue-500 items-center space-x-2 border-2 rounded-lg px-4 py-1 border-blue-500 font-semibold'
             >
-              <AiOutlinePlusCircle size={22} />{" "}
-              <span>
-                {env.length > 0 ? "Add More Variable" : "Environment Variable"}
-              </span>
+              <AiOutlinePlusCircle size={22} />{' '}
+              <span>{env.length > 0 ? 'Add More Variable' : 'Environment Variable'}</span>
             </button>
           </div>
 
-          <div className="flex justify-center items-center space-x-6 mt-6">
+          <div className='flex justify-center items-center space-x-6 mt-6'>
             <button
               disabled={formik.isSubmitting}
               onClick={closeDeployModal}
-              className="px-8 py-2 rounded-2xl border-2 border-red text-red"
-              type="button"
+              className='px-8 py-2 rounded-2xl border-2 border-red text-red'
+              type='button'
             >
               Batal
             </button>
             <button
               disabled={formik.isSubmitting}
-              className="px-8 py-2 rounded-2xl bg-green text-white disabled:bg-gray-300"
-              type="submit"
+              className='px-8 py-2 rounded-2xl bg-green text-white disabled:bg-gray-300'
+              type='submit'
             >
-              {formik.isSubmitting ? "Mendeploy..." : "Deploy"}
+              {formik.isSubmitting ? 'Mendeploy...' : 'Deploy'}
             </button>
           </div>
         </form>
@@ -766,10 +754,10 @@ export default function Deploy() {
       <Modal
         open={open}
         onClose={() => setState({ ...state, open: !open })}
-        width="100%"
+        width='100%'
         blur
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        aria-labelledby='modal-title'
+        aria-describedby='modal-description'
       >
         <Modal.Body className={styles.modal}>
           <div>
@@ -787,24 +775,21 @@ export default function Deploy() {
       <MyModal open={modalDelete} onClose={() => setModalDelete(false)}>
         <h1>Yakin ingin menghapusnya ?</h1>
 
-        <div className="flex justify-center items-center space-x-6 mt-6">
+        <div className='flex justify-center items-center space-x-6 mt-6'>
           <button
             onClick={() => {
-              setModalDelete(false);
+              setModalDelete(false)
             }}
-            className="px-8 py-2 rounded-2xl border-2 border-red text-red"
-            type="button"
+            className='px-8 py-2 rounded-2xl border-2 border-red text-red'
+            type='button'
           >
             Batal
           </button>
-          <button
-            className="px-8 py-2 rounded-2xl bg-red text-white"
-            onClick={deleteDeploy}
-          >
+          <button className='px-8 py-2 rounded-2xl bg-red text-white' onClick={deleteDeploy}>
             Hapus
           </button>
         </div>
       </MyModal>
     </Base>
-  );
+  )
 }
