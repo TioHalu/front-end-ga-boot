@@ -67,24 +67,6 @@ export default function ImagePage() {
     {
       title: 'CreatedAt',
       value: images?.map((image) => formatDate(image.createdAt))
-    },
-    {
-      title: 'Action',
-      value: images?.map((data, index) => {
-        return (
-          <div key={index} className={styles.action}>
-            <button
-              // onClick={() => {
-              //   setSelectedDeploy(data)
-              //   setModalDelete(true)
-              // }}
-              title='Delete Image'
-            >
-              <DeleteIcon className='text-red' />
-            </button>
-          </div>
-        )
-      })
     }
   ]
 
