@@ -30,6 +30,11 @@ export type ProjectType = {
   updatedAt: Date | null
 }
 
+type ProjectForm = {
+  projectName: string
+  projectLead?: string
+}
+
 export default function ProjectPage() {
   const user: any = UseAppSelector((state: any) => state.authLogin)
   const [projects, setProjects] = useState<ProjectType[]>()
@@ -42,7 +47,7 @@ export default function ProjectPage() {
   >([])
   const [isUpdated, setIsUpdated] = useState(false)
 
-  const formik = useFormik({
+  const formik = useFormik<ProjectForm>({
     initialValues: {
       projectName: '',
       projectLead: ''
@@ -50,11 +55,7 @@ export default function ProjectPage() {
     validationSchema: Yup.object({
       projectName: Yup.string().required('Required')
     }),
-    onSubmit: (values) => {
-      if (!projectMembers.length) {
-        toast.error('Pilih project member!')
-        return
-      }
+    onSubmit: async (values) => {
       const loading = toast.loading('Menambahkan...')
 
       let newValues: any = values
@@ -62,9 +63,13 @@ export default function ProjectPage() {
         newValues = { ...values, projectMembers: projectMembers.map((p) => p.value) }
       }
 
+      if (!values.projectLead) {
+        delete values.projectLead
+      }
+
       try {
         if (isUpdated) {
-          axios.put(API.project + `/${selectedProject?.projectId}`, newValues, {
+          await axios.put(API.project + `/${selectedProject?.projectId}`, newValues, {
             headers: {
               'auth-token': user?.user?.data?.token
             }
@@ -72,7 +77,7 @@ export default function ProjectPage() {
 
           toast.success('Berhasil mengupdate')
         } else {
-          axios.post(API.project, newValues, {
+          await axios.post(API.project, newValues, {
             headers: {
               'auth-token': user?.user?.data?.token
             }
