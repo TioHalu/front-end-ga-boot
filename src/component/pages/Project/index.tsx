@@ -48,8 +48,7 @@ export default function ProjectPage() {
       projectLead: ''
     },
     validationSchema: Yup.object({
-      projectName: Yup.string().required('Required'),
-      projectLead: Yup.string().required('Required')
+      projectName: Yup.string().required('Required')
     }),
     onSubmit: (values) => {
       if (!projectMembers.length) {
@@ -57,29 +56,27 @@ export default function ProjectPage() {
         return
       }
       const loading = toast.loading('Menambahkan...')
+
+      let newValues: any = values
+      if (projectMembers.length) {
+        newValues = { ...values, projectMembers: projectMembers.map((p) => p.value) }
+      }
+
       try {
         if (isUpdated) {
-          axios.put(
-            API.project + `/${selectedProject?.projectId}`,
-            { ...values, projectMembers: projectMembers.map((p) => p.value) },
-            {
-              headers: {
-                'auth-token': user?.user?.data?.token
-              }
+          axios.put(API.project + `/${selectedProject?.projectId}`, newValues, {
+            headers: {
+              'auth-token': user?.user?.data?.token
             }
-          )
+          })
 
           toast.success('Berhasil mengupdate')
         } else {
-          axios.post(
-            API.project,
-            { ...values, projectMembers: projectMembers.map((p) => p.value) },
-            {
-              headers: {
-                'auth-token': user?.user?.data?.token
-              }
+          axios.post(API.project, newValues, {
+            headers: {
+              'auth-token': user?.user?.data?.token
             }
-          )
+          })
 
           toast.success('Berhasil menambahkan')
         }

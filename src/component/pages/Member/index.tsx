@@ -114,11 +114,11 @@ export default function Deploy() {
   const option = [
     {
       label: 'Admin',
-      value: '1'
+      value: 1
     },
     {
       label: 'User',
-      value: '2'
+      value: 2
     }
   ]
   const handleClose = (helpers: any) => {
@@ -208,21 +208,21 @@ export default function Deploy() {
             icon={<AdminPanelSettingsIcon />}
             selected={values.roleId}
           />
-          <div className={styles.bottom}>
-            <Button className={styles.add} type='submit' loading={data?.fetching} size='sm'>
-              Tambahkan
-            </Button>
-            <Button
-              className={styles.batal}
-              type='button'
+          <div className='flex justify-center items-center space-x-6 mt-6'>
+            <button
               onClick={() => {
                 setOpen(false)
                 helpers.resetForm()
                 dispatch(resetForm())
               }}
+              className='px-8 py-2 rounded-2xl border-2 border-red text-red'
+              type='button'
             >
               Batal
-            </Button>
+            </button>
+            <button className='px-8 py-2 rounded-2xl bg-green text-white' type='submit'>
+              {data.fetching ? 'Menambahkan...' : 'Tambahkan'}
+            </button>
           </div>
         </div>
       </form>
@@ -232,7 +232,7 @@ export default function Deploy() {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Nama harus diisi').min(6, 'Nama minimal 6 karakter'),
     email: Yup.string().required('Email harus diisi').matches(REGEX.email, 'Email tidak valid'),
-    password: Yup.string().required('Password harus diisi').min(6, 'Password minimal 6 karakter'),
+    password: Yup.string().required('Password harus diisi').min(8, 'Password minimal 8 karakter'),
     roleId: Yup.string().required('Role harus diisi'),
     namespaces: Yup.string()
       .required('Namespaces harus diisi')
