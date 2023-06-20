@@ -63,7 +63,7 @@ export default function ProjectPage() {
         newValues = { ...values, projectMembers: projectMembers.map((p) => p.value) }
       }
 
-      if (!values.projectLead) {
+if (!values.projectLead) {
         delete values.projectLead
       }
 
