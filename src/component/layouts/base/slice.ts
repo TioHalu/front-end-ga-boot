@@ -16,7 +16,7 @@ export const baseSlice = createSlice({
       if(state.list.includes(action.payload)) {
         state.list.splice(state.list.indexOf(action.payload), 1);
       } else {
-        state.list.push(action.payload);
+        state.list = [...state.list, action.payload];
       }
     }
   },

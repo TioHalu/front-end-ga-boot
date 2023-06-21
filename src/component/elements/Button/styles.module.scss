@@ -1,6 +1,20 @@
 
   .buttonWrapper {
-    @apply flex bg-primary w-[160px] h-[48px] rounded-[20px];
+    @apply flex bg-primary w-[160px] h-[48px] rounded-[8px];
+    & button {
+      @apply flex justify-center items-center w-full h-full text-white;
+    }
+  }
+
+  .small {
+    @apply flex bg-primary w-[68px] h-[24px] rounded-[4px];
+    
+      & button {
+        @apply flex justify-center items-center w-full h-full text-white;
+      }
+  }
+  .rounded {
+    @apply flex bg-primary w-[24px] h-[24px] rounded-full;
     & button {
       @apply flex justify-center items-center w-full h-full text-white;
     }

@@ -1,0 +1,23 @@
+.root {
+  @apply p-[16px] rounded-[36px] bg-white shadow-md border-[1px]
+}
+
+.wrapper {
+  @apply flex flex-col items-center justify-center w-full h-full;
+  & label {
+    @apply font-bold text-darkLight text-2xl;
+  }
+  & h1 {
+    @apply text-8xl font-primary font-medium text-black;
+  }
+}
+
+.desc {
+  @apply flex items-center justify-center w-full h-full ;
+  & div {
+    @apply m-[5px] w-[15px] h-[15px] rounded-full;
+  }
+  & p{
+    @apply text-sm font-primary text-dark;
+  }
+}

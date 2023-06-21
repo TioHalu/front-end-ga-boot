@@ -18,7 +18,14 @@ module.exports = {
         darkLight: '#757575',
         grey: '#EEEEEE',
         white: '#ffffff',
+        green: '#20B038',
+        red: '#BD081C',
+        yellow: '#FBBC05',
+        abu: {
+          100: '#D9D9D9',
+        },
         transparent: 'transparent',
+        shadowNone:'none'
       },
       fontFamily: {
         primary: 'Roboto, sans-serif',
