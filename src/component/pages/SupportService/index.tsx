@@ -301,6 +301,7 @@ export default function SupportServicePage() {
             <Input
               variant='form'
               label='Developer Name'
+              disabled={true}
               errors={formik.touched.devName && formik.errors.devName}
               onChange={formik.handleChange}
               value={formik.values.devName}
@@ -308,36 +309,24 @@ export default function SupportServicePage() {
               name='devName'
             />
           )}
-          {user?.user?.data?.roleId === 1 ? (
-            <Input
-              variant='select'
-              name='namespace'
-              placeholder='Pilih namespace'
-              label='Namespace'
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                formik.setFieldValue('namespace', e.target.value)
+          <Input
+            variant='select'
+            name='namespace'
+            placeholder='Pilih namespace'
+            label='Namespace'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              formik.setFieldValue('namespace', e.target.value)
+            }
+            options={namespace?.map((ns: string) => {
+              return {
+                label: ns,
+                value: ns
               }
-              options={namespace?.map((ns: string) => {
-                return {
-                  label: ns,
-                  value: ns
-                }
-              })}
-              errors={formik.touched.namespace && formik.errors.namespace}
-              selected={formik.values.namespace}
-              icon={<BsFillClipboard2Fill className='ml-1' size={22} />}
-            />
-          ) : (
-            <Input
-              variant='form'
-              label='Namespaces'
-              errors={formik.touched.namespace && formik.errors.namespace}
-              onChange={formik.handleChange}
-              value={formik.values.namespace}
-              icon={<BsFillClipboard2Fill className='ml-1' size={22} />}
-              name='namespace'
-            />
-          )}
+            })}
+            errors={formik.touched.namespace && formik.errors.namespace}
+            selected={formik.values.namespace}
+            icon={<BsFillClipboard2Fill className='ml-1' size={22} />}
+          />
           <Input
             variant='form'
             label='Addons Service Name'
