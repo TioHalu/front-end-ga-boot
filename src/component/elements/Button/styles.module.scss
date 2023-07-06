@@ -1,21 +1,20 @@
+.buttonWrapper {
+  @apply flex bg-primary w-fit px-4 py-3 rounded-[8px] font-secondary;
+  & button {
+    @apply flex justify-center items-center w-full h-full text-white;
+  }
+}
 
-  .buttonWrapper {
-    @apply flex bg-primary w-[160px] h-[48px] rounded-[8px];
-    & button {
-      @apply flex justify-center items-center w-full h-full text-white;
-    }
-  }
+.small {
+  @apply flex bg-primary rounded-[4px];
 
-  .small {
-    @apply flex bg-primary w-[68px] h-[24px] rounded-[4px];
-    
-      & button {
-        @apply flex justify-center items-center w-full h-full text-white;
-      }
+  & button {
+    @apply flex justify-center items-center w-full h-full text-white;
   }
-  .rounded {
-    @apply flex bg-primary w-[24px] h-[24px] rounded-full;
-    & button {
-      @apply flex justify-center items-center w-full h-full text-white;
-    }
+}
+.rounded {
+  @apply flex bg-primary rounded-full px-3 py-1;
+  & button {
+    @apply flex justify-center items-center w-full h-full text-white;
   }
+}

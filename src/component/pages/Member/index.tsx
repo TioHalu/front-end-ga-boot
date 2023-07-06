@@ -272,7 +272,7 @@ export default function Deploy() {
     <Base>
       <div className={styles.wrapper}>
         <h1>Member</h1>
-        <Button onClick={() => setOpen(!open)}>+ tambahkan User</Button>
+        <Button onClick={() => setOpen(!open)}>+ Tambahkan User</Button>
       </div>
       <div className={styles.tableWrapper}>
         <Modal onClose={() => setOpen(false)} open={open}>
